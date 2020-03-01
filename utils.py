@@ -43,23 +43,7 @@ def pad_sents(sents, pad_token):
     return sents_padded
 
 
-def read_corpus(file_path, source):
-    """ Read file, where each sentence is dilineated by a `\n`.
-    @param file_path (str): path to file containing corpus
-    @param source (str): "tgt" or "src" indicating whether text
-        is of the source language or target language
-    """
-    data = []
-    for line in open(file_path):
-        sent = nltk.word_tokenize(line)
-        # only append <s> and </s> to the target sentence
-        if source == 'tgt':
-            sent = ['<s>'] + sent + ['</s>']
-        data.append(sent)
-
-    return data
-
-
+# TODO
 def batch_iter(data, batch_size, shuffle=False):
     """ Yield batches of source and target sentences reverse sorted by length (largest to smallest).
     @param data (list of (src_sent, tgt_sent)): list of tuples containing source and target sentence
