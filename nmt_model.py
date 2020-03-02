@@ -47,7 +47,6 @@ class NMT(nn.Module):
         )
         self.sentiment_projection = nn.Linear(2 * hidden_size, num_classes, bias=True)
 
-
     def forward(self, sents: List[List[str]], sentiments: List[int]) -> torch.Tensor:
         """ Take a mini-batch of sentences along with the associated sentiments. Outputs
         log-likelihood of each (sentence, sentiment) pair.
@@ -62,9 +61,8 @@ class NMT(nn.Module):
         scores = probs[range(len(sentiments)), sentiments].log()
         return scores
 
-
     def step(self, sents):
-        ''' compute log probabilities of each output class for each input '''
+        """ compute log probabilities of each output class for each input """
 
         sents_embedded, sents_length = self.model_embeddings.embed_sentence(
             sents, self.device
@@ -74,13 +72,11 @@ class NMT(nn.Module):
         )
 
         # pass through bi-directional LSTM
-        _, (last_hidden, _) = self.encoder(
-            sents_packed
-        ) 
+        _, (last_hidden, _) = self.encoder(sents_packed)
         # last_hidden is already h^forward_t and h^backward_0, so simply concatinating the two directions
         # gives the desired tensor to be projected into h_0^dec
         last_hidden = torch.cat((last_hidden[0], last_hidden[1]), -1)
-        
+
         # pass through FC layer
         fc_output = self.sentiment_projection(
             last_hidden
@@ -89,19 +85,18 @@ class NMT(nn.Module):
         probs = nn.Softmax(dim=-1)(fc_output)
         return probs
 
-
     def predict(self, sents):
         probs = self.step(sents)
         predictions = torch.argmax(probs, dim=-1)
         return predictions
-
 
     @property
     def device(self) -> torch.device:
         """ Determine which device to place the Tensors upon, CPU or GPU.
         """
         # return self.model_embeddings.source.weight.device
-        return torch.device("cpu")
+        # return torch.device("cpu")
+        return self.sentiment_projection.weight.device
 
     @staticmethod
     def load(model_path: str):
