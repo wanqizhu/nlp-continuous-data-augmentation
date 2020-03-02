@@ -62,10 +62,3 @@ class ModelEmbeddings:
             sent_lengths,
         )
 
-
-# m = ModelEmbeddings()
-# embed_out = m.embed_sentence([["hi", "there"], ["wow"], ["huh", "a", "but", "long"]],
-#                  device=torch.device("cpu"))
-
-# print(embed_out.shape)
-

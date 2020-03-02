@@ -43,7 +43,7 @@ def pad_sents(sents, pad_token):
 
 
 
-def load_training_data():
+def load_training_data(size=-1, dev_size=-1):
     '''
     labeledTree.to_labeled_lines()[0] gives you a single sentence and its labeling
 
@@ -59,8 +59,16 @@ def load_training_data():
     X = [labeledTree.to_labeled_lines()[0][1].split(" ") for labeledTree in data['train']]
     Y = [labeledTree.to_labeled_lines()[0][0] for labeledTree in data['train']]
 
+    if size > 0:
+        X = X[:size]
+        Y = Y[:size]
+
     X_dev = [labeledTree.to_labeled_lines()[0][1].split(" ") for labeledTree in data['dev']]
     Y_dev = [labeledTree.to_labeled_lines()[0][0] for labeledTree in data['dev']]
+
+    if dev_size > 0:
+        X_dev = X_dev[:dev_size]
+        Y_dev = Y_dev[:dev_size]
 
     return list(zip(X, Y)), list(zip(X_dev, Y_dev))
 
