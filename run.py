@@ -25,7 +25,7 @@ Options:
     --batch-size=<int>                      batch size [default: 32]
     --num-classes=<int>                     num classes in sentiment prediction [default: 5]
     --embed-size=<int>                      embedding size [default: 50]
-    --hidden-size=<int>                     hidden size [default: 100]
+    --hidden-size=<int>                     hidden size [default: 10]
     --clip-grad=<float>                     gradient clipping [default: 5.0]
     --log-every=<int>                       log every [default: 10]
     --max-epoch=<int>                       max epoch [default: 30]
@@ -72,8 +72,9 @@ def evaluate_dev(model, dev_data, batch_size):
     # no_grad() signals backend to throw away all gradients
     with torch.no_grad():
         for sentences, sentiments in batch_iter(dev_data, batch_size):
-            score = model(sentences, sentiments).sum()
-            cum_score += score.item()
+            #score = model(sentences, sentiments).sum()
+            #cum_score += score.item()
+            pass
 
         print("sample predictions")
         # print("sent\t true sentiment\t predicted sentiment")
@@ -98,7 +99,7 @@ def evaluate_dev(model, dev_data, batch_size):
         # TODO: compute accuracy instead of dev score
         correct = sum(
             [
-                (sentiment == prediction)
+                (sentiment == int(prediction))
                 for sentiment, prediction in zip(sentis, predictions)
             ]
         )
@@ -135,7 +136,7 @@ def train(args: Dict):
     """
 
     # TODO
-    train_data, dev_data = load_training_data(size=500, dev_size=1000)
+    train_data, dev_data = load_training_data(size=-1, dev_size=-1)
 
     # TODO: compute distribution
     train_d = defaultdict(int)
@@ -261,6 +262,8 @@ def train(args: Dict):
                     hist_valid_scores
                 )
                 hist_valid_scores.append(valid_metric)
+
+                train_score = evaluate_dev(model, train_data, batch_size=100000)
 
                 # see some trainig examples
                 with torch.no_grad():

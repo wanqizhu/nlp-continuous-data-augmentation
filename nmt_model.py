@@ -81,7 +81,7 @@ class NMT(nn.Module):
         fc_output = self.sentiment_projection(
             last_hidden
         )  # size should be (batch_size, num_classes)
-        # fc_output = nn.Dropout(0.6)(fc_output)
+        fc_output = nn.Dropout(0.4)(fc_output)
         probs = nn.Softmax(dim=-1)(fc_output)
         return probs
 
