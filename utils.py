@@ -16,8 +16,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import nltk
-# nltk.download('punkt')
+import pytreebank
 
 
 def pad_sents(sents, pad_token):
@@ -43,10 +42,32 @@ def pad_sents(sents, pad_token):
     return sents_padded
 
 
-# TODO
+
+def load_training_data():
+    '''
+    labeledTree.to_labeled_lines()[0] gives you a single sentence and its labeling
+
+    we split it into X = list of words, Y = sentence's labeling
+
+    By default, Y falls into [0, 1, 2, 3, 4]
+
+    @returns: train, dev
+        train: List[(List[words], sentiment)] for each sentence in dataset
+        dev: ~
+    '''
+    data = pytreebank.load_sst()
+    X = [labeledTree.to_labeled_lines()[0][1].split(" ") for labeledTree in data['train']]
+    Y = [labeledTree.to_labeled_lines()[0][0] for labeledTree in data['train']]
+
+    X_dev = [labeledTree.to_labeled_lines()[0][1].split(" ") for labeledTree in data['dev']]
+    Y_dev = [labeledTree.to_labeled_lines()[0][0] for labeledTree in data['dev']]
+
+    return list(zip(X, Y)), list(zip(X_dev, Y_dev))
+
+
 def batch_iter(data, batch_size, shuffle=False):
     """ Yield batches of source and target sentences reverse sorted by length (largest to smallest).
-    @param data (list of (src_sent, tgt_sent)): list of tuples containing source and target sentence
+    @param data (list of (sentences, sentiments)): list of tuples containing sentence & sentiment labels
     @param batch_size (int): batch size
     @param shuffle (boolean): whether to randomly shuffle the dataset
     """
@@ -60,9 +81,9 @@ def batch_iter(data, batch_size, shuffle=False):
         indices = index_array[i * batch_size: (i + 1) * batch_size]
         examples = [data[idx] for idx in indices]
 
-        examples = sorted(examples, key=lambda e: len(e[0]), reverse=True)
-        src_sents = [e[0] for e in examples]
-        tgt_sents = [e[1] for e in examples]
+        examples = sorted(examples, key=lambda e: len(e[0]), reverse=True)  # e = one (sentence, sentiment) sorting by len(sentences)
+        sentences = [e[0] for e in examples]
+        sentiments = [e[1] for e in examples]
 
-        yield src_sents, tgt_sents
+        yield sentences, sentiments
 

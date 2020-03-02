@@ -44,8 +44,8 @@ class ModelEmbeddings:
         @returns: list of (batch_size)
         """
 
-        print(sents)
-        print(device)
+        # print(sents)
+        # print(device)
 
         sentsIdx = [
             [self.word_to_idx[wd] if wd in self.word_to_idx else 0 for wd in sent]
@@ -56,7 +56,7 @@ class ModelEmbeddings:
 
         sent_lengths = [len(s) for s in sents]
         sents_embedded = self.embeddings[sents_padded.T]
-        print(sents_embedded.shape)
+        # print(sents_embedded.shape)
         return (
             torch.tensor(sents_embedded, dtype=torch.float, device=device),
             sent_lengths,

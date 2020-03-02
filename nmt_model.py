@@ -83,7 +83,7 @@ class NMT(nn.Module):
             last_hidden
         )  # size should be (batch_size, num_classes)
         probs = nn.Softmax(dim=-1)(fc_output)
-        scores = probs[range(len(sentiments)), sentiments]
+        scores = probs[range(len(sentiments)), sentiments].log()
         return scores
 
     @property
