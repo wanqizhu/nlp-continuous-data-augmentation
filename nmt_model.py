@@ -85,11 +85,12 @@ class NMT(nn.Module):
         fc_output = self.sentiment_projection(
             last_hidden
         )  # size should be (batch_size, num_classes)
+        # fc_output = nn.Dropout(0.6)(fc_output)
         probs = nn.Softmax(dim=-1)(fc_output)
         return probs
 
 
-    def predict(this, sents):
+    def predict(self, sents):
         probs = self.step(sents)
         predictions = torch.argmax(probs, dim=-1)
         return predictions

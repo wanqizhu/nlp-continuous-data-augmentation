@@ -61,6 +61,7 @@ import torch.nn.utils
 # TODO sample random predictions?
 def evaluate_dev(model, dev_data, batch_size):
     '''
+        higher is betterrrrrrrr
     '''
     was_training = model.training
     model.eval()
@@ -71,10 +72,20 @@ def evaluate_dev(model, dev_data, batch_size):
     with torch.no_grad():
         for sentences, sentiments in batch_iter(dev_data, batch_size):
             score = model(sentences, sentiments).sum()
-
             cum_score += score.item()
             
-        
+
+        print('sample predictions')
+        print('sent\t true sentiment\t predicted sentiment')
+        sents = sentences[:10]
+        sentis = sentiments[:10]
+        predictions = model.predict(sents)
+        probabilities = model.step(sents)
+
+        for i in range(10):
+            print(" ".join(sents[i]), sentis[i], predictions[i], probabilities[i])
+        print('\n\n')
+
     if was_training:
         model.train()
 
@@ -106,7 +117,7 @@ def train(args: Dict):
     """
 
     # TODO
-    train_data, dev_data = load_training_data()#size=500, dev_size=100)
+    train_data, dev_data = load_training_data(size=500, dev_size=100)
 
     train_batch_size = int(args['--batch-size'])
     clip_grad = float(args['--clip-grad'])
@@ -120,11 +131,11 @@ def train(args: Dict):
                 num_classes=int(args['--num-classes']))
     model.train()
 
-    # uniform_init = float(args['--uniform-init'])
-    # if np.abs(uniform_init) > 0.:
-    #     print('uniformly initialize parameters [-%f, +%f]' % (uniform_init, uniform_init), file=sys.stderr)
-    #     for p in model.parameters():
-    #         p.data.uniform_(-uniform_init, uniform_init)
+    uniform_init = float(args['--uniform-init'])
+    if np.abs(uniform_init) > 0.:
+        print('uniformly initialize parameters [-%f, +%f]' % (uniform_init, uniform_init), file=sys.stderr)
+        for p in model.parameters():
+            p.data.uniform_(-uniform_init, uniform_init)
 
     device = torch.device("cuda:0" if args['--cuda'] else "cpu")
     print('use device: %s' % device, file=sys.stderr)
@@ -144,12 +155,12 @@ def train(args: Dict):
     while True:
         epoch += 1
 
-        for sents, sentiments in batch_iter(train_data, batch_size=train_batch_size, shuffle=True):
+        for sentences, sentiments in batch_iter(train_data, batch_size=train_batch_size, shuffle=True):
             train_iter += 1
 
             optimizer.zero_grad()
 
-            example_losses = -model(sents, sentiments) # (batch_size,)
+            example_losses = -model(sentences, sentiments) # (batch_size,)
             batch_size = len(example_losses)  # in case data augmentation makes returned 
                                                 # number of examples > input batch size
             batch_loss = example_losses.sum()
@@ -172,13 +183,13 @@ def train(args: Dict):
             if train_iter % log_every == 0:
                 print('epoch %d, iter %d, avg. loss %.2f' \
                       'cum. examples %d, time elapsed %.2f sec' % (epoch, train_iter,
-                                                                                         report_loss / report_examples,
-                                                                            
-                                                                                         cum_examples,
-                                                                                         time.time() - begin_time), file=sys.stderr)
+                                                                 report_loss / report_examples,
+                                                                 cum_examples,
+                                                                 time.time() - begin_time), file=sys.stderr)
 
                 train_time = time.time()
                 report_loss = report_examples = 0.
+
 
             # perform validation
             if train_iter % valid_niter == 0:
@@ -200,42 +211,56 @@ def train(args: Dict):
                 is_better = len(hist_valid_scores) == 0 or valid_metric > max(hist_valid_scores)
                 hist_valid_scores.append(valid_metric)
 
-                if is_better:
-                    patience = 0
-                    print('save currently the best model to [%s]' % model_save_path, file=sys.stderr)
-                    model.save(model_save_path)
 
-                    # also save the optimizers' state
-                    torch.save(optimizer.state_dict(), model_save_path + '.optim')
-                elif patience < int(args['--patience']):
-                    patience += 1
-                    print('hit patience %d' % patience, file=sys.stderr)
+                # see some trainig examples
+                with torch.no_grad():
+                    print('[training] sample predictions')
+                    print('sent\t true sentiment\t predicted sentiment')
+                    sents = sentences[:5]
+                    sentis = sentiments[:5]
+                    predictions = model.predict(sents)
+                    probabilities = model.step(sents)
 
-                    if patience == int(args['--patience']):
-                        num_trial += 1
-                        print('hit #%d trial' % num_trial, file=sys.stderr)
-                        if num_trial == int(args['--max-num-trial']):
-                            print('early stop!', file=sys.stderr)
-                            exit(0)
+                    for i in range(5):
+                        print(" ".join(sents[i]), sentis[i], predictions[i], probabilities[i])
 
-                        # decay lr, and restore from previously best checkpoint
-                        lr = optimizer.param_groups[0]['lr'] * float(args['--lr-decay'])
-                        print('load previously best model and decay learning rate to %f' % lr, file=sys.stderr)
 
-                        # load model
-                        params = torch.load(model_save_path, map_location=lambda storage, loc: storage)
-                        model.load_state_dict(params['state_dict'])
-                        model = model.to(device)
+                # if is_better:
+                #     patience = 0
+                #     print('save currently the best model to [%s]' % model_save_path, file=sys.stderr)
+                #     model.save(model_save_path)
 
-                        print('restore parameters of the optimizers', file=sys.stderr)
-                        optimizer.load_state_dict(torch.load(model_save_path + '.optim'))
+                #     # also save the optimizers' state
+                #     torch.save(optimizer.state_dict(), model_save_path + '.optim')
+                # elif patience < int(args['--patience']):
+                #     patience += 1
+                #     print('hit patience %d' % patience, file=sys.stderr)
 
-                        # set new lr
-                        for param_group in optimizer.param_groups:
-                            param_group['lr'] = lr
+                #     if patience == int(args['--patience']):
+                #         num_trial += 1
+                #         print('hit #%d trial' % num_trial, file=sys.stderr)
+                #         if num_trial == int(args['--max-num-trial']):
+                #             print('early stop!', file=sys.stderr)
+                #             exit(0)
 
-                        # reset patience
-                        patience = 0
+                #         # decay lr, and restore from previously best checkpoint
+                #         lr = optimizer.param_groups[0]['lr'] * float(args['--lr-decay'])
+                #         print('load previously best model and decay learning rate to %f' % lr, file=sys.stderr)
+
+                #         # load model
+                #         params = torch.load(model_save_path, map_location=lambda storage, loc: storage)
+                #         model.load_state_dict(params['state_dict'])
+                #         model = model.to(device)
+
+                #         print('restore parameters of the optimizers', file=sys.stderr)
+                #         optimizer.load_state_dict(torch.load(model_save_path + '.optim'))
+
+                #         # set new lr
+                #         for param_group in optimizer.param_groups:
+                #             param_group['lr'] = lr
+
+                #         # reset patience
+                #         patience = 0
 
                 if epoch == int(args['--max-epoch']):
                     print('reached maximum number of epochs!', file=sys.stderr)
