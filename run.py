@@ -54,43 +54,62 @@ import numpy as np
 from typing import List, Tuple, Dict, Set, Union
 from tqdm import tqdm
 from utils import batch_iter, load_training_data
+from collections import defaultdict
 
 import torch
 import torch.nn.utils
 
 # TODO sample random predictions?
 def evaluate_dev(model, dev_data, batch_size):
-    '''
+    """
         higher is betterrrrrrrr
-    '''
+    """
     was_training = model.training
     model.eval()
 
-    cum_score = 0.
+    cum_score = 0.0
 
     # no_grad() signals backend to throw away all gradients
     with torch.no_grad():
         for sentences, sentiments in batch_iter(dev_data, batch_size):
             score = model(sentences, sentiments).sum()
             cum_score += score.item()
-            
 
-        print('sample predictions')
-        print('sent\t true sentiment\t predicted sentiment')
-        sents = sentences[:10]
-        sentis = sentiments[:10]
+        print("sample predictions")
+        # print("sent\t true sentiment\t predicted sentiment")
+        sents = sentences[:-1]  # 100 total
+        sentis = sentiments[:-1]
         predictions = model.predict(sents)
         probabilities = model.step(sents)
 
         for i in range(10):
-            print(" ".join(sents[i]), sentis[i], predictions[i], probabilities[i])
-        print('\n\n')
+            # print(" ".join(sents[i]), sentis[i], predictions[i], probabilities[i])
+            print(sentis[i], predictions[i], probabilities[i])
+
+        counts = defaultdict(int)
+        sentiments = defaultdict(int)
+        for pred in predictions:
+            counts[int(pred)] += 1
+        for sentiment in sentis:
+            sentiments[sentiment] += 1
+        print(counts)
+        print(sentiments)
+
+        # TODO: compute accuracy instead of dev score
+        correct = sum(
+            [
+                (sentiment == prediction)
+                for sentiment, prediction in zip(sentis, predictions)
+            ]
+        )
+        print("NUMBER CORRECT: %d" % correct)
+
+        print("\n\n")
 
     if was_training:
         model.train()
 
     return cum_score / len(dev_data)
-
 
 
 # TODO
@@ -107,7 +126,6 @@ def predict(args):
     #         accuracy = (sentences == sentiments).sum()
     #         cum_correct += accuracy.item()
 
-
     # return cum_correct / len(test_data)
 
 
@@ -117,52 +135,70 @@ def train(args: Dict):
     """
 
     # TODO
-    train_data, dev_data = load_training_data(size=500, dev_size=100)
+    train_data, dev_data = load_training_data(size=500, dev_size=1000)
 
-    train_batch_size = int(args['--batch-size'])
-    clip_grad = float(args['--clip-grad'])
-    valid_niter = int(args['--valid-niter'])
-    log_every = int(args['--log-every'])
-    model_save_path = args['--save-to']
+    # TODO: compute distribution
+    train_d = defaultdict(int)
+    dev_d = defaultdict(int)
+    for train in train_data:
+        train_d[train[1]] += 1
+    for dev in dev_data:
+        dev_d[dev[1]] += 1
 
-    
-    model = NMT(embed_size=int(args['--embed-size']),
-                hidden_size=int(args['--hidden-size']),
-                num_classes=int(args['--num-classes']))
+    print(train_d)
+    print(dev_d)
+    # return
+
+    train_batch_size = int(args["--batch-size"])
+    clip_grad = float(args["--clip-grad"])
+    valid_niter = int(args["--valid-niter"])
+    log_every = int(args["--log-every"])
+    model_save_path = args["--save-to"]
+
+    model = NMT(
+        embed_size=int(args["--embed-size"]),
+        hidden_size=int(args["--hidden-size"]),
+        num_classes=int(args["--num-classes"]),
+    )
     model.train()
 
-    uniform_init = float(args['--uniform-init'])
-    if np.abs(uniform_init) > 0.:
-        print('uniformly initialize parameters [-%f, +%f]' % (uniform_init, uniform_init), file=sys.stderr)
+    uniform_init = float(args["--uniform-init"])
+    if np.abs(uniform_init) > 0.0:
+        print(
+            "uniformly initialize parameters [-%f, +%f]" % (uniform_init, uniform_init),
+            file=sys.stderr,
+        )
         for p in model.parameters():
             p.data.uniform_(-uniform_init, uniform_init)
 
-    device = torch.device("cuda:0" if args['--cuda'] else "cpu")
-    print('use device: %s' % device, file=sys.stderr)
+    device = torch.device("cuda:0" if args["--cuda"] else "cpu")
+    print("use device: %s" % device, file=sys.stderr)
 
     model = model.to(device)
-    print('confirming model device', model.device)
+    print("confirming model device", model.device)
 
-    optimizer = torch.optim.Adam(model.parameters(), lr=float(args['--lr']))
+    optimizer = torch.optim.Adam(model.parameters(), lr=float(args["--lr"]))
 
     num_trial = 0
     train_iter = patience = cum_loss = report_loss = 0
     cum_examples = report_examples = epoch = valid_num = 0
     hist_valid_scores = []
     train_time = begin_time = time.time()
-    print('begin Maximum Likelihood training')
+    print("begin Maximum Likelihood training")
 
     while True:
         epoch += 1
 
-        for sentences, sentiments in batch_iter(train_data, batch_size=train_batch_size, shuffle=True):
+        for sentences, sentiments in batch_iter(
+            train_data, batch_size=train_batch_size, shuffle=True
+        ):
             train_iter += 1
 
             optimizer.zero_grad()
 
-            example_losses = -model(sentences, sentiments) # (batch_size,)
-            batch_size = len(example_losses)  # in case data augmentation makes returned 
-                                                # number of examples > input batch size
+            example_losses = -model(sentences, sentiments)  # (batch_size,)
+            batch_size = len(example_losses)  # in case data augmentation makes returned
+            # number of examples > input batch size
             batch_loss = example_losses.sum()
             loss = batch_loss / batch_size
 
@@ -181,49 +217,72 @@ def train(args: Dict):
             cum_examples += batch_size
 
             if train_iter % log_every == 0:
-                print('epoch %d, iter %d, avg. loss %.2f' \
-                      'cum. examples %d, time elapsed %.2f sec' % (epoch, train_iter,
-                                                                 report_loss / report_examples,
-                                                                 cum_examples,
-                                                                 time.time() - begin_time), file=sys.stderr)
+                print(
+                    "epoch %d, iter %d, avg. loss %.2f"
+                    "cum. examples %d, time elapsed %.2f sec"
+                    % (
+                        epoch,
+                        train_iter,
+                        report_loss / report_examples,
+                        cum_examples,
+                        time.time() - begin_time,
+                    ),
+                    file=sys.stderr,
+                )
 
                 train_time = time.time()
-                report_loss = report_examples = 0.
-
+                report_loss = report_examples = 0.0
 
             # perform validation
             if train_iter % valid_niter == 0:
-                print('epoch %d, iter %d, cum. loss %.2f, cum. examples %d' % (epoch, train_iter,
-                                                                                         cum_loss / cum_examples,
-                                                                                         cum_examples), file=sys.stderr)
+                print(
+                    "epoch %d, iter %d, cum. loss %.2f, cum. examples %d"
+                    % (epoch, train_iter, cum_loss / cum_examples, cum_examples),
+                    file=sys.stderr,
+                )
 
-                cum_loss = cum_examples = 0.
+                cum_loss = cum_examples = 0.0
                 valid_num += 1
 
-                print('begin validation ...', file=sys.stderr)
+                print("begin validation ...", file=sys.stderr)
 
                 # compute dev
-                dev_score = evaluate_dev(model, dev_data, batch_size=128)   # dev batch size can be a bit larger
+                dev_score = evaluate_dev(
+                    model, dev_data, batch_size=5000
+                )  # dev batch size can be a bit larger
                 valid_metric = -dev_score
 
-                print('validation: iter %d, dev. score %f' % (train_iter, dev_score), file=sys.stderr)
+                print(
+                    "validation: iter %d, dev. score %f" % (train_iter, dev_score),
+                    file=sys.stderr,
+                )
 
-                is_better = len(hist_valid_scores) == 0 or valid_metric > max(hist_valid_scores)
+                is_better = len(hist_valid_scores) == 0 or valid_metric > max(
+                    hist_valid_scores
+                )
                 hist_valid_scores.append(valid_metric)
-
 
                 # see some trainig examples
                 with torch.no_grad():
-                    print('[training] sample predictions')
-                    print('sent\t true sentiment\t predicted sentiment')
+                    print("[training] sample predictions")
+                    # print("sent\t true sentiment\t predicted sentiment")
                     sents = sentences[:5]
                     sentis = sentiments[:5]
                     predictions = model.predict(sents)
                     probabilities = model.step(sents)
 
                     for i in range(5):
-                        print(" ".join(sents[i]), sentis[i], predictions[i], probabilities[i])
+                        print(
+                            # " ".join(sents[i]),
+                            sentis[i],
+                            predictions[i],
+                            probabilities[i],
+                        )
 
+                    counts = defaultdict(int)
+                    for pred in predictions:
+                        counts[int(pred)] += 1
+                    print(counts)
 
                 # if is_better:
                 #     patience = 0
@@ -262,10 +321,9 @@ def train(args: Dict):
                 #         # reset patience
                 #         patience = 0
 
-                if epoch == int(args['--max-epoch']):
-                    print('reached maximum number of epochs!', file=sys.stderr)
+                if epoch == int(args["--max-epoch"]):
+                    print("reached maximum number of epochs!", file=sys.stderr)
                     exit(0)
-
 
 
 def main():
@@ -274,22 +332,26 @@ def main():
     args = docopt(__doc__)
 
     # Check pytorch version
-    assert(torch.__version__ >= "1.0.0"), "Please update your installation of PyTorch. You have {} and you should have version 1.0.0".format(torch.__version__)
+    assert (
+        torch.__version__ >= "1.0.0"
+    ), "Please update your installation of PyTorch. You have {} and you should have version 1.0.0".format(
+        torch.__version__
+    )
 
     # seed the random number generators
-    seed = int(args['--seed'])
+    seed = int(args["--seed"])
     torch.manual_seed(seed)
-    if args['--cuda']:
+    if args["--cuda"]:
         torch.cuda.manual_seed(seed)
     np.random.seed(seed * 13 // 7)
 
-    if args['train']:
+    if args["train"]:
         train(args)
-    elif args['test']:
+    elif args["test"]:
         test(args)
     else:
-        raise RuntimeError('invalid run mode')
+        raise RuntimeError("invalid run mode")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
