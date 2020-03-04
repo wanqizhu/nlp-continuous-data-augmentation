@@ -45,12 +45,30 @@ class NMT(nn.Module):
         self.hidden_size = hidden_size
         self.num_classes = num_classes
         self.dropout_rate = dropout_rate
+        self.augmentation_method = augmentation_method
 
         self.encoder = nn.LSTM(
             embed_size, hidden_size, num_layers=1, bidirectional=True
         )
         self.sentiment_projection = nn.Linear(2 * hidden_size, num_classes, bias=True)
         self.dropout = nn.Dropout(dropout_rate)
+
+
+    def embed_and_augment_data(self, sentences, sentiments):
+        sentences_embedded, sentences_length = self.model_embeddings.embed_sentence(
+            sentences, self.device
+        )
+
+        ## TODO: augment sentences_embedded
+        if self.augmentation_method is None:
+            pass
+
+        sentences_packed = pack_padded_sequence(
+            sentences_embedded, sentences_length, enforce_sorted=False
+        )
+
+        return sentences_packed, sentiments
+
 
     def forward(self, sents: List[List[str]], sentiments: List[int]) -> torch.Tensor:
         """ Take a mini-batch of sentences along with the associated sentiments. Outputs
@@ -62,22 +80,15 @@ class NMT(nn.Module):
         @returns scores (Tensor): a variable/tensor of shape (batch_size, ) representing the
                                     log-likelihood of generating the correct sentiment
         """
-        probs = self.step(sents)
+        sentences_packed, sentiments = self.embed_and_augment_data(sents, sentiments)
+        probs = self.step(sentences_packed)
         scores = probs[range(len(sentiments)), sentiments].log()
         return scores
 
-    def step(self, sents):
+    def step(self, sentences_packed):
         """ compute log probabilities of each output class for each input """
-
-        sents_embedded, sents_length = self.model_embeddings.embed_sentence(
-            sents, self.device
-        )
-        sents_packed = pack_padded_sequence(
-            sents_embedded, sents_length, enforce_sorted=False
-        )
-
         # pass through bi-directional LSTM
-        _, (last_hidden, _) = self.encoder(sents_packed)
+        _, (last_hidden, _) = self.encoder(sentences_packed)
         # last_hidden is already h^forward_t and h^backward_0, so simply concatinating the two directions
         # gives the desired tensor to be projected into h_0^dec
         last_hidden = torch.cat((last_hidden[0], last_hidden[1]), -1)
@@ -90,8 +101,15 @@ class NMT(nn.Module):
         probs = nn.Softmax(dim=-1)(fc_output)
         return probs
 
-    def predict(self, sents):
-        probs = self.step(sents)
+    def predict(self, sentences):
+        # DO NOT augment data here
+        sentences_embedded, sentences_length = self.model_embeddings.embed_sentence(
+            sentences, self.device
+        )
+        sentences_packed = pack_padded_sequence(
+            sentences_embedded, sentences_length, enforce_sorted=False
+        )
+        probs = self.step(sentences_packed)
         predictions = torch.argmax(probs, dim=-1)
         return predictions
 
