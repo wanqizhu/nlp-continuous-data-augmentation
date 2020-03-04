@@ -43,7 +43,7 @@ def pad_sents(sents, pad_token):
 
 
 
-def load_training_data(size=-1, dev_size=-1):
+def load_training_data(perct=1., dev_perct=1.):
     '''
     labeledTree.to_labeled_lines()[0] gives you a single sentence and its labeling
 
@@ -58,19 +58,42 @@ def load_training_data(size=-1, dev_size=-1):
     data = pytreebank.load_sst()
     X = [labeledTree.to_labeled_lines()[0][1].split(" ") for labeledTree in data['train']]
     Y = [labeledTree.to_labeled_lines()[0][0] for labeledTree in data['train']]
+    
+    train_size = int(len(X) * perct)
+    X = X[:train_size]
+    Y = Y[:train_size]
 
-    if size > 0:
-        X = X[:size]
-        Y = Y[:size]
 
     X_dev = [labeledTree.to_labeled_lines()[0][1].split(" ") for labeledTree in data['dev']]
     Y_dev = [labeledTree.to_labeled_lines()[0][0] for labeledTree in data['dev']]
-
-    if dev_size > 0:
-        X_dev = X_dev[:dev_size]
-        Y_dev = Y_dev[:dev_size]
+    
+    dev_size = int(len(X_dev) * dev_perct)
+    X_dev = X_dev[:dev_size]
+    Y_dev = Y_dev[:dev_size]
 
     return list(zip(X, Y)), list(zip(X_dev, Y_dev))
+
+
+def load_test_data(perct=1.):
+    '''
+    labeledTree.to_labeled_lines()[0] gives you a single sentence and its labeling
+
+    we split it into X = list of words, Y = sentence's labeling
+
+    By default, Y falls into [0, 1, 2, 3, 4]
+
+    @returns: test
+        test: List[(List[words], sentiment)] for each sentence in dataset
+    '''
+    data = pytreebank.load_sst()
+    X = [labeledTree.to_labeled_lines()[0][1].split(" ") for labeledTree in data['test']]
+    Y = [labeledTree.to_labeled_lines()[0][0] for labeledTree in data['test']]
+
+    test_size = int(len(X) * perct)
+    X = X[:test_size]
+    Y = Y[:test_size]
+
+    return list(zip(X, Y))
 
 
 def batch_iter(data, batch_size, shuffle=False):

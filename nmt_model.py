@@ -29,23 +29,28 @@ class NMT(nn.Module):
         - Global Attention Model (Luong, et al. 2015)
     """
 
-    def __init__(self, embed_size, hidden_size, num_classes):
+    def __init__(self, embed_size, hidden_size, num_classes, dropout_rate=0.3,
+                 augmentation_method=None):
         """ Init NMT Model.
 
         @param embed_size (int): Embedding size (dimensionality)
         @param hidden_size (int): Hidden Size, the size of hidden states (dimensionality)
+        @param num_classes (int): Num classes in classification task
         @param dropout_rate (float): Dropout probability, for attention
+        @param augmentation_method (string or None): type of data augmentation to use
         """
         super(NMT, self).__init__()
         self.model_embeddings = ModelEmbeddings(embed_size=embed_size)
         self.embed_size = embed_size
         self.hidden_size = hidden_size
         self.num_classes = num_classes
+        self.dropout_rate = dropout_rate
 
         self.encoder = nn.LSTM(
             embed_size, hidden_size, num_layers=1, bidirectional=True
         )
         self.sentiment_projection = nn.Linear(2 * hidden_size, num_classes, bias=True)
+        self.dropout = nn.Dropout(dropout_rate)
 
     def forward(self, sents: List[List[str]], sentiments: List[int]) -> torch.Tensor:
         """ Take a mini-batch of sentences along with the associated sentiments. Outputs
@@ -81,7 +86,7 @@ class NMT(nn.Module):
         fc_output = self.sentiment_projection(
             last_hidden
         )  # size should be (batch_size, num_classes)
-        fc_output = nn.Dropout(0.4)(fc_output)
+        fc_output = self.dropout(fc_output)
         probs = nn.Softmax(dim=-1)(fc_output)
         return probs
 
@@ -89,6 +94,16 @@ class NMT(nn.Module):
         probs = self.step(sents)
         predictions = torch.argmax(probs, dim=-1)
         return predictions
+
+
+    def compute_accuracy(self, sentences, sentiments):
+        '''
+        Return % accuracy of prediction compared to true labels
+        '''
+        predictions = self.predict(sentences)
+        sentiments = torch.tensor(sentiments)
+        return (predictions == sentiments).sum().item() / len(sentences)
+
 
     @property
     def device(self) -> torch.device:
@@ -121,6 +136,7 @@ class NMT(nn.Module):
                 embed_size=self.embed_size,
                 hidden_size=self.hidden_size,
                 num_classes=self.num_classes,
+                dropout_rate=self.dropout_rate
             ),
             "state_dict": self.state_dict(),
         }

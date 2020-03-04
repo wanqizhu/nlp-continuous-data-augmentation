@@ -10,8 +10,7 @@ Vera Lin <veralin@stanford.edu>
 
 Usage:
     run.py train [options]
-    run.py decode [options] MODEL_PATH TEST_SOURCE_FILE OUTPUT_FILE
-    run.py decode [options] MODEL_PATH TEST_SOURCE_FILE TEST_TARGET_FILE OUTPUT_FILE
+    run.py test [options] MODEL_PATH
 
 Options:
     -h --help                               show this screen.
@@ -41,6 +40,8 @@ Options:
     --valid-niter=<int>                     perform validation after how many iterations [default: 2000]
     --dropout=<float>                       dropout [default: 0.3]
     --max-decoding-time-step=<int>          maximum number of decoding time steps [default: 70]
+    --train-perct=<float>                   % of training data to use [default: 1.0]
+    --dev-perct=<float>                     % of dev data to use [default: 1.0]
 """
 import math
 import sys
@@ -53,7 +54,7 @@ from nmt_model import NMT
 import numpy as np
 from typing import List, Tuple, Dict, Set, Union
 from tqdm import tqdm
-from utils import batch_iter, load_training_data
+from utils import batch_iter, load_training_data, load_test_data
 from collections import defaultdict
 
 import torch
@@ -68,66 +69,47 @@ def evaluate_dev(model, dev_data, batch_size):
     model.eval()
 
     cum_score = 0.0
+    cum_correct = 0
 
     # no_grad() signals backend to throw away all gradients
     with torch.no_grad():
         for sentences, sentiments in batch_iter(dev_data, batch_size):
-            #score = model(sentences, sentiments).sum()
-            #cum_score += score.item()
-            pass
-
-        print("sample predictions")
-        # print("sent\t true sentiment\t predicted sentiment")
-        sents = sentences[:-1]  # 100 total
-        sentis = sentiments[:-1]
-        predictions = model.predict(sents)
-        probabilities = model.step(sents)
-
-        for i in range(10):
-            # print(" ".join(sents[i]), sentis[i], predictions[i], probabilities[i])
-            print(sentis[i], predictions[i], probabilities[i])
-
-        counts = defaultdict(int)
-        sentiments = defaultdict(int)
-        for pred in predictions:
-            counts[int(pred)] += 1
-        for sentiment in sentis:
-            sentiments[sentiment] += 1
-        print(counts)
-        print(sentiments)
-
-        # TODO: compute accuracy instead of dev score
-        correct = sum(
-            [
-                (sentiment == int(prediction))
-                for sentiment, prediction in zip(sentis, predictions)
-            ]
-        )
-        print("NUMBER CORRECT: %d" % correct)
-
-        print("\n\n")
+            score = model(sentences, sentiments).sum()
+            cum_score += score.item()
+            cum_correct += model.compute_accuracy(sentences, sentiments) * len(sentences)
 
     if was_training:
         model.train()
 
-    return cum_score / len(dev_data)
+    # return: loss, accuracy
+    return cum_score / len(dev_data), cum_correct / len(dev_data)
 
 
 # TODO
-def predict(args):
-    # TODO
-    pass
+def test(args):
+    print("load model from {}".format(args['MODEL_PATH']), file=sys.stderr)
+    model = NMT.load(args['MODEL_PATH'])
 
-    # # model, test_data, batch_size):
-    # cum_correct = 0
+    if args['--cuda']:
+        model = model.to(torch.device("cuda:0"))
 
-    # with torch.no_grad():
-    #     for sentences, sentiments in batch_iter(test_data, batch_size):
-    #         predictions = model.predict(sentences)
-    #         accuracy = (sentences == sentiments).sum()
-    #         cum_correct += accuracy.item()
+    test_data = load_test_data()
+    batch_size = int(args["--batch-size"])
 
-    # return cum_correct / len(test_data)
+    cum_correct = 0
+    cum_score = 0
+
+    with torch.no_grad():
+        for sentences, sentiments in batch_iter(test_data, batch_size):
+            correct = model.compute_accuracy(sentences, sentiments) * len(sentences)
+            cum_correct += correct
+            score = model(sentences, sentiments).sum()
+            cum_score += score
+
+    print("test dataset size: %d" % len(test_data))
+    print("accuracy: %f" % (cum_correct / len(test_data)))
+    print("loss: %f" % (cum_score / len(test_data)))
+
 
 
 def train(args: Dict):
@@ -136,7 +118,8 @@ def train(args: Dict):
     """
 
     # TODO
-    train_data, dev_data = load_training_data(size=-1, dev_size=-1)
+    train_data, dev_data = load_training_data(perct=float(args['--train-perct']), 
+                                              dev_perct=float(args['--dev-perct']))
 
     # TODO: compute distribution
     train_d = defaultdict(int)
@@ -146,9 +129,11 @@ def train(args: Dict):
     for dev in dev_data:
         dev_d[dev[1]] += 1
 
-    print(train_d)
-    print(dev_d)
-    # return
+    print('train size', len(train_data))
+    print('train class distributions', train_d)
+    print('dev size', len(dev_data))
+    print('dev class distributions', dev_d)
+
 
     train_batch_size = int(args["--batch-size"])
     clip_grad = float(args["--clip-grad"])
@@ -160,6 +145,7 @@ def train(args: Dict):
         embed_size=int(args["--embed-size"]),
         hidden_size=int(args["--hidden-size"]),
         num_classes=int(args["--num-classes"]),
+        dropout_rate=float(args["--dropout"])
     )
     model.train()
 
@@ -236,9 +222,10 @@ def train(args: Dict):
 
             # perform validation
             if train_iter % valid_niter == 0:
+                train_accuracy = model.compute_accuracy(sentences, sentiments)
                 print(
-                    "epoch %d, iter %d, cum. loss %.2f, cum. examples %d"
-                    % (epoch, train_iter, cum_loss / cum_examples, cum_examples),
+                    "epoch %d, iter %d, cum. loss %.2f, cum. examples %d, accuracy: %f"
+                    % (epoch, train_iter, cum_loss / cum_examples, cum_examples, train_accuracy),
                     file=sys.stderr,
                 )
 
@@ -248,13 +235,13 @@ def train(args: Dict):
                 print("begin validation ...", file=sys.stderr)
 
                 # compute dev
-                dev_score = evaluate_dev(
+                dev_loss, dev_accuracy = evaluate_dev(
                     model, dev_data, batch_size=5000
                 )  # dev batch size can be a bit larger
-                valid_metric = -dev_score
+                valid_metric = dev_loss  # maybe use accuracy instead?
 
                 print(
-                    "validation: iter %d, dev. score %f" % (train_iter, dev_score),
+                    "validation: iter %d, dev. loss %f, dev. accuracy %f" % (train_iter, dev_loss, dev_accuracy),
                     file=sys.stderr,
                 )
 
@@ -266,63 +253,63 @@ def train(args: Dict):
                 train_score = evaluate_dev(model, train_data, batch_size=100000)
 
                 # see some trainig examples
-                with torch.no_grad():
-                    print("[training] sample predictions")
-                    # print("sent\t true sentiment\t predicted sentiment")
-                    sents = sentences[:5]
-                    sentis = sentiments[:5]
-                    predictions = model.predict(sents)
-                    probabilities = model.step(sents)
+                # with torch.no_grad():
+                #     print("[training] sample predictions")
+                #     # print("sent\t true sentiment\t predicted sentiment")
+                #     sents = sentences[:5]
+                #     sentis = sentiments[:5]
+                #     predictions = model.predict(sents)
+                #     probabilities = model.step(sents)
 
-                    for i in range(5):
-                        print(
-                            # " ".join(sents[i]),
-                            sentis[i],
-                            predictions[i],
-                            probabilities[i],
-                        )
+                #     for i in range(5):
+                #         print(
+                #             # " ".join(sents[i]),
+                #             sentis[i],
+                #             predictions[i],
+                #             probabilities[i],
+                #         )
 
-                    counts = defaultdict(int)
-                    for pred in predictions:
-                        counts[int(pred)] += 1
-                    print(counts)
+                #     counts = defaultdict(int)
+                #     for pred in predictions:
+                #         counts[int(pred)] += 1
+                #     print(counts)
 
-                # if is_better:
-                #     patience = 0
-                #     print('save currently the best model to [%s]' % model_save_path, file=sys.stderr)
-                #     model.save(model_save_path)
+                if is_better:
+                    patience = 0
+                    print('save currently the best model to [%s]' % model_save_path, file=sys.stderr)
+                    model.save(model_save_path)
 
-                #     # also save the optimizers' state
-                #     torch.save(optimizer.state_dict(), model_save_path + '.optim')
-                # elif patience < int(args['--patience']):
-                #     patience += 1
-                #     print('hit patience %d' % patience, file=sys.stderr)
+                    # also save the optimizers' state
+                    torch.save(optimizer.state_dict(), model_save_path + '.optim')
+                elif patience < int(args['--patience']):
+                    patience += 1
+                    print('hit patience %d' % patience, file=sys.stderr)
 
-                #     if patience == int(args['--patience']):
-                #         num_trial += 1
-                #         print('hit #%d trial' % num_trial, file=sys.stderr)
-                #         if num_trial == int(args['--max-num-trial']):
-                #             print('early stop!', file=sys.stderr)
-                #             exit(0)
+                    if patience == int(args['--patience']):
+                        num_trial += 1
+                        print('hit #%d trial' % num_trial, file=sys.stderr)
+                        if num_trial == int(args['--max-num-trial']):
+                            print('early stop!', file=sys.stderr)
+                            exit(0)
 
-                #         # decay lr, and restore from previously best checkpoint
-                #         lr = optimizer.param_groups[0]['lr'] * float(args['--lr-decay'])
-                #         print('load previously best model and decay learning rate to %f' % lr, file=sys.stderr)
+                        # decay lr, and restore from previously best checkpoint
+                        lr = optimizer.param_groups[0]['lr'] * float(args['--lr-decay'])
+                        print('load previously best model and decay learning rate to %f' % lr, file=sys.stderr)
 
-                #         # load model
-                #         params = torch.load(model_save_path, map_location=lambda storage, loc: storage)
-                #         model.load_state_dict(params['state_dict'])
-                #         model = model.to(device)
+                        # load model
+                        params = torch.load(model_save_path, map_location=lambda storage, loc: storage)
+                        model.load_state_dict(params['state_dict'])
+                        model = model.to(device)
 
-                #         print('restore parameters of the optimizers', file=sys.stderr)
-                #         optimizer.load_state_dict(torch.load(model_save_path + '.optim'))
+                        print('restore parameters of the optimizers', file=sys.stderr)
+                        optimizer.load_state_dict(torch.load(model_save_path + '.optim'))
 
-                #         # set new lr
-                #         for param_group in optimizer.param_groups:
-                #             param_group['lr'] = lr
+                        # set new lr
+                        for param_group in optimizer.param_groups:
+                            param_group['lr'] = lr
 
-                #         # reset patience
-                #         patience = 0
+                        # reset patience
+                        patience = 0
 
                 if epoch == int(args["--max-epoch"]):
                     print("reached maximum number of epochs!", file=sys.stderr)
