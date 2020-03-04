@@ -56,6 +56,7 @@ from typing import List, Tuple, Dict, Set, Union
 from tqdm import tqdm
 from utils import batch_iter, load_training_data, load_test_data
 from collections import defaultdict
+from data_augmenter import BaseDataAugmenter
 
 import torch
 import torch.nn.utils
@@ -141,11 +142,15 @@ def train(args: Dict):
     log_every = int(args["--log-every"])
     model_save_path = args["--save-to"]
 
+    # TODO: load data_augmenter based on args
+    data_augmenter = BaseDataAugmenter()
+
     model = NMT(
         embed_size=int(args["--embed-size"]),
         hidden_size=int(args["--hidden-size"]),
         num_classes=int(args["--num-classes"]),
-        dropout_rate=float(args["--dropout"])
+        dropout_rate=float(args["--dropout"]),
+        data_augmenter=data_augmenter
     )
     model.train()
 
@@ -235,13 +240,13 @@ def train(args: Dict):
                 print("begin validation ...", file=sys.stderr)
 
                 # compute dev
-                dev_loss, dev_accuracy = evaluate_dev(
+                dev_score, dev_accuracy = evaluate_dev(
                     model, dev_data, batch_size=5000
                 )  # dev batch size can be a bit larger
-                valid_metric = dev_loss  # maybe use accuracy instead?
+                valid_metric = dev_score  # maybe use accuracy instead?
 
                 print(
-                    "validation: iter %d, dev. loss %f, dev. accuracy %f" % (train_iter, dev_loss, dev_accuracy),
+                    "validation: iter %d, dev. score %f, dev. accuracy %f" % (train_iter, dev_score, dev_accuracy),
                     file=sys.stderr,
                 )
 

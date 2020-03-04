@@ -40,8 +40,8 @@ class ModelEmbeddings:
         """
         sents: List[List[str]] of length batch_size, and variable sentence length inside
 
-        @returns: tensor of (max_sentence_length, batch_size, embed_size)
-        @returns: list of (batch_size)
+        @returns: sentences: tensor of (max_sentence_length, batch_size, embed_size)
+        @returns: sent_lengths: list of (batch_size)
         """
 
         # print(sents)

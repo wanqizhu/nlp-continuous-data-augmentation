@@ -30,14 +30,14 @@ class NMT(nn.Module):
     """
 
     def __init__(self, embed_size, hidden_size, num_classes, dropout_rate=0.3,
-                 augmentation_method=None):
+                 data_augmenter=None):
         """ Init NMT Model.
 
         @param embed_size (int): Embedding size (dimensionality)
         @param hidden_size (int): Hidden Size, the size of hidden states (dimensionality)
         @param num_classes (int): Num classes in classification task
         @param dropout_rate (float): Dropout probability, for attention
-        @param augmentation_method (string or None): type of data augmentation to use
+        @param data_augmenter (DataAugmenter instance or None): type of data augmentation to use
         """
         super(NMT, self).__init__()
         self.model_embeddings = ModelEmbeddings(embed_size=embed_size)
@@ -45,7 +45,7 @@ class NMT(nn.Module):
         self.hidden_size = hidden_size
         self.num_classes = num_classes
         self.dropout_rate = dropout_rate
-        self.augmentation_method = augmentation_method
+        self.data_augmenter = data_augmenter
 
         self.encoder = nn.LSTM(
             embed_size, hidden_size, num_layers=1, bidirectional=True
@@ -59,9 +59,10 @@ class NMT(nn.Module):
             sentences, self.device
         )
 
-        ## TODO: augment sentences_embedded
-        if self.augmentation_method is None:
-            pass
+        if self.data_augmenter is not None:
+            sentences_embedded, sentences_length, sentiments = self.data_augmenter.augment(sentences_embedded,
+                                                                                        sentences_length,
+                                                                                        sentiments)
 
         sentences_packed = pack_padded_sequence(
             sentences_embedded, sentences_length, enforce_sorted=False
@@ -154,7 +155,8 @@ class NMT(nn.Module):
                 embed_size=self.embed_size,
                 hidden_size=self.hidden_size,
                 num_classes=self.num_classes,
-                dropout_rate=self.dropout_rate
+                dropout_rate=self.dropout_rate,
+                data_augmenter=self.data_augmenter
             ),
             "state_dict": self.state_dict(),
         }
