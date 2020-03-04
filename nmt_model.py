@@ -119,7 +119,7 @@ class NMT(nn.Module):
         Return % accuracy of prediction compared to true labels
         '''
         predictions = self.predict(sentences)
-        sentiments = torch.tensor(sentiments)
+        sentiments = torch.tensor(sentiments, device=self.device)
         return (predictions == sentiments).sum().item() / len(sentences)
 
 
