@@ -23,4 +23,5 @@ for filename in filenames:
 
 
 plt.legend()
-plt.show()
+# plt.show()
+plt.savefig('graph_out.jpg')

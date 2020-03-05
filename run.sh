@@ -7,7 +7,9 @@ elif [ "$1" = "test" ]; then
 elif [ "$1" = "train_local" ]; then
 	python3 run.py train --train-perct 0.2 --valid-niter 100
 elif [ "$1" = "test_local" ]; then
-    python3 run.py test model.bin
+  python3 run.py test model.bin
+elif [ "$1" = "clean_logs" ]; then
+  rm *_logfiles/*
 else
 	echo "Invalid Option Selected"
 fi
