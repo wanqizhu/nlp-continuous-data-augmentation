@@ -26,7 +26,7 @@ Options:
     --embed-size=<int>                      embedding size [default: 50]
     --hidden-size=<int>                     hidden size [default: 10]
     --clip-grad=<float>                     gradient clipping [default: 5.0]
-    --log-every=<int>                       log every [default: 10]
+    --log-every=<int>                       log every [default: 50]
     --max-epoch=<int>                       max epoch [default: 30]
     --input-feed                            use input feeding
     --patience=<int>                        wait for how many iterations to decay learning rate [default: 5]
@@ -77,7 +77,9 @@ def evaluate_dev(model, dev_data, batch_size):
         for sentences, sentiments in batch_iter(dev_data, batch_size):
             score = model(sentences, sentiments).sum()
             cum_score += score.item()
-            cum_correct += model.compute_accuracy(sentences, sentiments) * len(sentences)
+            cum_correct += model.compute_accuracy(sentences, sentiments) * len(
+                sentences
+            )
 
     if was_training:
         model.train()
@@ -88,10 +90,10 @@ def evaluate_dev(model, dev_data, batch_size):
 
 # TODO
 def test(args):
-    print("load model from {}".format(args['MODEL_PATH']), file=sys.stderr)
-    model = NMT.load(args['MODEL_PATH'])
+    print("load model from {}".format(args["MODEL_PATH"]), file=sys.stderr)
+    model = NMT.load(args["MODEL_PATH"])
 
-    if args['--cuda']:
+    if args["--cuda"]:
         model = model.to(torch.device("cuda:0"))
 
     test_data = load_test_data()
@@ -113,29 +115,40 @@ def test(args):
     print("loss: %f" % (cum_score / len(test_data)))
 
 
+def print_and_write(s, f):
+    print(s)
+    f.write(s + "\n")
+
 
 def train(args: Dict):
     """ Train the NMT Model.
     @param args (Dict): args from cmd line
     """
+    long_logfile = "long_logfiles/" + str(time.time()) + "long.txt"
+    train_logfile = "train_logfiles/" + str(time.time()) + "train.txt"
+    dev_logfile = "dev_logfiles/" + str(time.time()) + "dev.txt"
+    f_long = open(long_logfile, "w")
+    f_train = open(train_logfile, "w")
+    # TODO: add hyperparameters
+    f_train.write("#epoch, train iter, train score\n")
+    f_dev = open(dev_logfile, "w")
+    f_dev.write("#epoch, train iter, dev score, dev accuracy\n")
 
-    # TODO
-    train_data, dev_data = load_training_data(perct=float(args['--train-perct']), 
-                                              dev_perct=float(args['--dev-perct']))
+    train_data, dev_data = load_training_data(
+        perct=float(args["--train-perct"]), dev_perct=float(args["--dev-perct"])
+    )
 
-    # # TODO: compute distribution
-    # train_d = defaultdict(int)
-    # dev_d = defaultdict(int)
-    # for train in train_data:
-    #     train_d[train[1]] += 1
-    # for dev in dev_data:
-    #     dev_d[dev[1]] += 1
-
-    # print('train size', len(train_data))
-    # print('train class distributions', train_d)
-    # print('dev size', len(dev_data))
-    # print('dev class distributions', dev_d)
-
+    # compute train and dev distributions
+    train_d = defaultdict(int)
+    dev_d = defaultdict(int)
+    for train in train_data:
+        train_d[train[1]] += 1
+    for dev in dev_data:
+        dev_d[dev[1]] += 1
+    print_and_write("train size %d" % len(train_data), f_long)
+    print_and_write("train class distributions %s" % train_d, f_long)
+    print_and_write("dev size %d" % len(dev_data), f_long)
+    print_and_write("dev class distributions %s" % dev_d, f_long)
 
     train_batch_size = int(args["--batch-size"])
     clip_grad = float(args["--clip-grad"])
@@ -152,9 +165,8 @@ def train(args: Dict):
         data_augmenter = GaussianNoiseDataAugmenter(embed_size, 0.01)
     else:
         data_augmenter = BaseDataAugmenter(embed_size)
-    
-    dev_data_augmenter = BaseDataAugmenter(embed_size)  # just embed no augmentation
 
+    dev_data_augmenter = BaseDataAugmenter(embed_size)  # just embed no augmentation
 
     # perform augmentation
     train_data_aug = data_augmenter.augment(train_data)
@@ -165,7 +177,8 @@ def train(args: Dict):
         embed_size=embed_size,
         hidden_size=int(args["--hidden-size"]),
         num_classes=int(args["--num-classes"]),
-        dropout_rate=float(args["--dropout"])
+        dropout_rate=float(args["--dropout"]),
+        data_augmenter=data_augmenter,
     )
     model.train()
 
@@ -179,10 +192,9 @@ def train(args: Dict):
             p.data.uniform_(-uniform_init, uniform_init)
 
     device = torch.device("cuda:0" if args["--cuda"] else "cpu")
-    print("use device: %s" % device, file=sys.stderr)
-
+    print_and_write("use device: %s" % device, f_long)
     model = model.to(device)
-    print("confirming model device", model.device)
+    print_and_write("confirming model device %s" % model.device, f_long)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=float(args["--lr"]))
 
@@ -191,7 +203,7 @@ def train(args: Dict):
     cum_examples = report_examples = epoch = valid_num = 0
     hist_valid_scores = []
     train_time = begin_time = time.time()
-    print("begin Maximum Likelihood training")
+    print_and_write("begin Maximum Likelihood training", f_long)
 
     while True:
         epoch += 1
@@ -224,8 +236,9 @@ def train(args: Dict):
             cum_examples += batch_size
 
             if train_iter % log_every == 0:
-                print(
-                    "epoch %d, iter %d, avg. loss %.2f"
+                # train_accuracy = model.compute_accuracy(sentences, sentiments)
+                print_and_write(
+                    "epoch %d, iter %d, avg. loss %.2f, "
                     "cum. examples %d, time elapsed %.2f sec"
                     % (
                         epoch,
@@ -234,7 +247,11 @@ def train(args: Dict):
                         cum_examples,
                         time.time() - begin_time,
                     ),
-                    file=sys.stderr,
+                    f_long,
+                )
+                f_train.write(
+                    "%d, %d, %.2f\n"
+                    % (epoch, train_iter, report_loss / report_examples)
                 )
 
                 train_time = time.time()
@@ -242,17 +259,10 @@ def train(args: Dict):
 
             # perform validation
             if train_iter % valid_niter == 0:
-                train_accuracy = model.compute_accuracy(sentences, sentiments)
-                print(
-                    "epoch %d, iter %d, cum. loss %.2f, cum. examples %d, accuracy: %f"
-                    % (epoch, train_iter, cum_loss / cum_examples, cum_examples, train_accuracy),
-                    file=sys.stderr,
-                )
-
                 cum_loss = cum_examples = 0.0
                 valid_num += 1
 
-                print("begin validation ...", file=sys.stderr)
+                print_and_write("begin validation ...", f_long)
 
                 # compute dev
                 dev_score, dev_accuracy = evaluate_dev(
@@ -261,8 +271,12 @@ def train(args: Dict):
                 valid_metric = dev_score  # maybe use accuracy instead?
 
                 print(
-                    "validation: iter %d, dev. score %f, dev. accuracy %f" % (train_iter, dev_score, dev_accuracy),
+                    "validation: iter %d, dev. score %f, dev. accuracy %f"
+                    % (train_iter, dev_score, dev_accuracy),
                     file=sys.stderr,
+                )
+                f_dev.write(
+                    "%d, %d, %f, %f\n" % (epoch, train_iter, dev_score, dev_accuracy)
                 )
 
                 is_better = len(hist_valid_scores) == 0 or valid_metric > max(
@@ -270,7 +284,7 @@ def train(args: Dict):
                 )
                 hist_valid_scores.append(valid_metric)
 
-                # train_score = evaluate_dev(model, train_data_aug, batch_size=100000)
+                # train_score = evaluate_dev(model, train_data, batch_size=100000)
 
                 # see some trainig examples
                 # with torch.no_grad():
@@ -296,43 +310,54 @@ def train(args: Dict):
 
                 if is_better:
                     patience = 0
-                    print('save currently the best model to [%s]' % model_save_path, file=sys.stderr)
+                    print_and_write(
+                        "save currently the best model to [%s]" % model_save_path,
+                        f_long,
+                    )
                     model.save(model_save_path)
 
                     # also save the optimizers' state
-                    torch.save(optimizer.state_dict(), model_save_path + '.optim')
-                elif patience < int(args['--patience']):
+                    torch.save(optimizer.state_dict(), model_save_path + ".optim")
+                elif patience < int(args["--patience"]):
                     patience += 1
-                    print('hit patience %d' % patience, file=sys.stderr)
+                    print_and_write("hit patience %d" % patience, f_long)
 
-                    if patience == int(args['--patience']):
+                    if patience == int(args["--patience"]):
                         num_trial += 1
-                        print('hit #%d trial' % num_trial, file=sys.stderr)
-                        if num_trial == int(args['--max-num-trial']):
-                            print('early stop!', file=sys.stderr)
+                        print_and_write("hit #%d trial" % num_trial, f_long)
+                        if num_trial == int(args["--max-num-trial"]):
+                            print_and_write("early stop!", f_long)
                             exit(0)
 
                         # decay lr, and restore from previously best checkpoint
-                        lr = optimizer.param_groups[0]['lr'] * float(args['--lr-decay'])
-                        print('load previously best model and decay learning rate to %f' % lr, file=sys.stderr)
+                        lr = optimizer.param_groups[0]["lr"] * float(args["--lr-decay"])
+                        print_and_write(
+                            "load previously best model and decay learning rate to %f"
+                            % lr,
+                            f_long,
+                        )
 
                         # load model
-                        params = torch.load(model_save_path, map_location=lambda storage, loc: storage)
-                        model.load_state_dict(params['state_dict'])
+                        params = torch.load(
+                            model_save_path, map_location=lambda storage, loc: storage
+                        )
+                        model.load_state_dict(params["state_dict"])
                         model = model.to(device)
 
-                        print('restore parameters of the optimizers', file=sys.stderr)
-                        optimizer.load_state_dict(torch.load(model_save_path + '.optim'))
+                        print_and_write("restore parameters of the optimizers", f_long)
+                        optimizer.load_state_dict(
+                            torch.load(model_save_path + ".optim")
+                        )
 
                         # set new lr
                         for param_group in optimizer.param_groups:
-                            param_group['lr'] = lr
+                            param_group["lr"] = lr
 
                         # reset patience
                         patience = 0
 
                 if epoch == int(args["--max-epoch"]):
-                    print("reached maximum number of epochs!", file=sys.stderr)
+                    print_and_write("reached maximum number of epochs!", f_long)
                     exit(0)
 
 
