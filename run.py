@@ -20,6 +20,8 @@ Options:
     --dev-src=<file>                        dev source file
     --dev-tgt=<file>                        dev target file
     --data-aug=<string>                     data augmentation method [default: "None"]
+    --data-aug-amount=<float>               data augmentation amount [default: 0.01]
+    --data-aug-nx=<int>                     data augmentation niters size [default: 4]
     --seed=<int>                            seed [default: 0]
     --batch-size=<int>                      batch size [default: 32]
     --num-classes=<int>                     num classes in sentiment prediction [default: 5]
@@ -149,10 +151,11 @@ def train(args: Dict):
     embed_size = int(args["--embed-size"])
 
     # TODO: load train data_augmenter based on args
-    data_augmenter = str(args["--data-aug"])
+    data_augmenter = str(args["--data-aug"]).lower()
     print_and_write("Using data augmentation method: %s" % data_augmenter, f_long)
     if data_augmenter == "gaussian":
-        data_augmenter = GaussianNoiseDataAugmenter()
+        data_augmenter = GaussianNoiseDataAugmenter(float(args["--data-aug-amount"]),
+                                                    int(args["--data-aug-nx"]))
     else:
         data_augmenter = BaseDataAugmenter()
 
