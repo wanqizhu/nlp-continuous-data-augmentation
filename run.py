@@ -54,7 +54,7 @@ from nmt_model import NMT
 import numpy as np
 from typing import List, Tuple, Dict, Set, Union
 from tqdm import tqdm
-from utils import batch_iter, load_training_data, load_test_data
+from utils import batch_iter, load_train_data, load_dev_data, load_test_data
 from collections import defaultdict
 from data_augmenter import BaseDataAugmenter, GaussianNoiseDataAugmenter
 
@@ -139,8 +139,8 @@ def train(args: Dict):
 
 
     # TODO
-    train_data, dev_data = load_training_data(perct=float(args['--train-perct']), 
-                                              dev_perct=float(args['--dev-perct']))
+    train_data = load_train_data(perct=float(args['--train-perct'])) 
+    dev_data = load_dev_data(dev_perct=float(args['--dev-perct']))
 
     train_batch_size = int(args["--batch-size"])
     clip_grad = float(args["--clip-grad"])
