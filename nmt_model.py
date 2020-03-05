@@ -63,7 +63,7 @@ class NMT(nn.Module):
         max_len = max(sentences_length)
 
         sentences_padded = [np.pad(s, ((0, max_len - len(s)), (0, 0))) for s in sentences]
-        sentences_padded = torch.tensor(sentences_padded, device=self.device).permute(1, 0, 2)
+        sentences_padded = torch.tensor(sentences_padded, dtype=torch.float, device=self.device).permute(1, 0, 2)
 
         sentences_packed = pack_padded_sequence(
             sentences_padded, sentences_length, enforce_sorted=False
