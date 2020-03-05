@@ -35,6 +35,7 @@ class ModelEmbeddings:
         self.embeddings = np.array(embeddings, dtype=float)
         print("embeddings shape", self.embeddings.shape)
 
+
     def embed_sentence(self, sents):
         """
         sents: List[List[str]] of length batch_size, and variable sentence length inside

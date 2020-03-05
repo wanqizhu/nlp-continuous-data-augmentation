@@ -97,7 +97,6 @@ def test(args):
         model = model.to(torch.device("cuda:0"))
 
     test_data = load_test_data()
-    test_data = BaseDataAugmenter(int(args["--embed-size"])).augment(test_data)
     batch_size = int(args["--batch-size"])
 
     cum_correct = 0
@@ -138,17 +137,10 @@ def train(args: Dict):
         perct=float(args["--train-perct"]), dev_perct=float(args["--dev-perct"])
     )
 
-    # compute train and dev distributions
-    train_d = defaultdict(int)
-    dev_d = defaultdict(int)
-    for train in train_data:
-        train_d[train[1]] += 1
-    for dev in dev_data:
-        dev_d[dev[1]] += 1
-    print_and_write("train size %d" % len(train_data), f_long)
-    print_and_write("train class distributions %s" % train_d, f_long)
-    print_and_write("dev size %d" % len(dev_data), f_long)
-    print_and_write("dev class distributions %s" % dev_d, f_long)
+
+    # TODO
+    train_data, dev_data = load_training_data(perct=float(args['--train-perct']), 
+                                              dev_perct=float(args['--dev-perct']))
 
     train_batch_size = int(args["--batch-size"])
     clip_grad = float(args["--clip-grad"])
@@ -162,16 +154,15 @@ def train(args: Dict):
     data_augmenter = str(args["--data-aug"])
     print("Using data augmentation method: ", data_augmenter)
     if data_augmenter == "gaussian":
-        data_augmenter = GaussianNoiseDataAugmenter(embed_size, 0.01)
+        data_augmenter = GaussianNoiseDataAugmenter()
     else:
-        data_augmenter = BaseDataAugmenter(embed_size)
-
-    dev_data_augmenter = BaseDataAugmenter(embed_size)  # just embed no augmentation
-
+        data_augmenter = BaseDataAugmenter()
+    
     # perform augmentation
     train_data_aug = data_augmenter.augment(train_data)
     print("train size: ", len(train_data[0]), "after aug", len(train_data_aug))
-    dev_data_aug = dev_data_augmenter.augment(dev_data)
+    # print([(t[0].sum(), t[1]) for t in train_data_aug])
+    
 
     model = NMT(
         embed_size=embed_size,
@@ -266,7 +257,7 @@ def train(args: Dict):
 
                 # compute dev
                 dev_score, dev_accuracy = evaluate_dev(
-                    model, dev_data_aug, batch_size=5000
+                    model, dev_data, batch_size=5000
                 )  # dev batch size can be a bit larger
                 valid_metric = dev_score  # maybe use accuracy instead?
 

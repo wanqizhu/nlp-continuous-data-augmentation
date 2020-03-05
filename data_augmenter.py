@@ -1,36 +1,33 @@
-from model_embeddings import ModelEmbeddings
 import numpy as np
 
 class BaseDataAugmenter:
-    def __init__(self, embed_size):
-        self.model_embeddings = ModelEmbeddings(embed_size=embed_size)
+    def __init__(self):
+        pass
 
-    def augment(self, raw_train_data):
+    def augment(self, embedded_training_data):
         '''
-        @param raw_train_data: (List[List[words]], List[sentiment])
+        @param embedded_training_data: (List[np.ndarrays (unpadded embeddings)], List[sentiment])
         
         @return: List[(embedded_vectors, sentiment)], with possibly extended BATCH_SIZE
         '''
 
-        sentences, sentiments = raw_train_data
-        sentences_embedded = self.model_embeddings.embed_sentence(sentences)
-
-        return list(zip(sentences_embedded, sentiments))
+        sentences, sentiments = embedded_training_data
+        return list(zip(sentences, sentiments))
 
 
 
 class GaussianNoiseDataAugmenter(BaseDataAugmenter):
-    def __init__(self, embed_size, std):
-        super().__init__(embed_size)
+    def __init__(self, std=0.01, niters=3):
+        super().__init__()
         self.std = std
+        self.niters = niters
 
 
-    def augment(self, raw_train_data):
-        sentences, sentiments = raw_train_data
-        sentences_embedded = self.model_embeddings.embed_sentence(sentences)
+    def augment(self, embedded_training_data):
+        sentences, sentiments = embedded_training_data
 
-        sentences_embedded = sentences_embedded + [s + np.random.normal(scale=self.std, size=s.shape)
-                                                    for s in sentences_embedded]
-        sentiments = sentiments + [s for s in sentiments]
+        sentences = sentences + [s + np.random.normal(scale=self.std, size=s.shape)
+                                                    for s in (sentences*self.niters)]
+        sentiments = sentiments + [s for s in (sentiments * self.niters)]
 
-        return list(zip(sentences_embedded, sentiments))
+        return list(zip(sentences, sentiments))
