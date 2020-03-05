@@ -19,7 +19,7 @@ Options:
     --train-tgt=<file>                      train target file
     --dev-src=<file>                        dev source file
     --dev-tgt=<file>                        dev target file
-    --vocab=<file>                          vocab file
+    --data-aug=<string>                     data augmentation method [default: "None"]
     --seed=<int>                            seed [default: 0]
     --batch-size=<int>                      batch size [default: 32]
     --num-classes=<int>                     num classes in sentiment prediction [default: 5]
@@ -56,7 +56,7 @@ from typing import List, Tuple, Dict, Set, Union
 from tqdm import tqdm
 from utils import batch_iter, load_training_data, load_test_data
 from collections import defaultdict
-from data_augmenter import BaseDataAugmenter
+from data_augmenter import BaseDataAugmenter, GaussianNoiseDataAugmenter
 
 import torch
 import torch.nn.utils
@@ -143,17 +143,26 @@ def train(args: Dict):
     log_every = int(args["--log-every"])
     model_save_path = args["--save-to"]
 
+    embed_size = int(args["--embed-size"])
+
     # TODO: load train data_augmenter based on args
-    data_augmenter = BaseDataAugmenter(int(args["--embed-size"]))
-    dev_data_augmenter = BaseDataAugmenter(int(args["--embed-size"]))  # just embed no augmentation
+    data_augmenter = str(args["--data-aug"])
+    print("Using data augmentation method: ", data_augmenter)
+    if data_augmenter == "gaussian":
+        data_augmenter = GaussianNoiseDataAugmenter(embed_size, 0.01)
+    else:
+        data_augmenter = BaseDataAugmenter(embed_size)
+    
+    dev_data_augmenter = BaseDataAugmenter(embed_size)  # just embed no augmentation
 
 
     # perform augmentation
     train_data_aug = data_augmenter.augment(train_data)
+    print("train size: ", len(train_data[0]), "after aug", len(train_data_aug))
     dev_data_aug = dev_data_augmenter.augment(dev_data)
 
     model = NMT(
-        embed_size=int(args["--embed-size"]),
+        embed_size=embed_size,
         hidden_size=int(args["--hidden-size"]),
         num_classes=int(args["--num-classes"]),
         dropout_rate=float(args["--dropout"])
