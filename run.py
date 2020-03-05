@@ -134,10 +134,8 @@ def train(args: Dict):
     f_dev = open(dev_logfile, "w")
     f_dev.write("#epoch, train iter, dev score, dev accuracy\n")
 
-    # TODO
-    train_data = load_train_data(perct=float(args['--train-perct'])) 
-    dev_data = load_dev_data(dev_perct=float(args['--dev-perct']))
-
+    train_data = load_train_data(perct=float(args["--train-perct"]))
+    dev_data = load_dev_data(dev_perct=float(args["--dev-perct"]))
 
     train_batch_size = int(args["--batch-size"])
     clip_grad = float(args["--clip-grad"])
@@ -161,7 +159,6 @@ def train(args: Dict):
         "train size: %d, after aug %d" % (len(train_data[0]), len(train_data_aug)),
         f_long,
     )
-    dev_data_aug = dev_data_augmenter.augment(dev_data)
 
     model = NMT(
         embed_size=embed_size,
