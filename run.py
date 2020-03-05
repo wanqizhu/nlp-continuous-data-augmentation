@@ -129,7 +129,10 @@ def train(args: Dict):
     f_long = open(long_logfile, "w")
     f_train = open(train_logfile, "w")
     # TODO: add hyperparameters
-    f_train.write("#args: %s" % args)
+    args_tuples = [(arg, args[arg]) for arg in args]
+    f_train.write("#args_tuples: %s\n" % args_tuples)
+    for (arg, val) in args_tuples:
+        f_train.write("#%s: %s\n" % (arg, val))
     f_train.write("#epoch, train iter, train score\n")
     f_dev = open(dev_logfile, "w")
     f_dev.write("#epoch, train iter, dev score, dev accuracy\n")
