@@ -16,6 +16,7 @@ import torch.nn as nn
 import torch.nn.utils
 import torch.nn.functional as F
 from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence
+import numpy as np
 
 from model_embeddings import ModelEmbeddings
 
@@ -40,7 +41,6 @@ class NMT(nn.Module):
         @param data_augmenter (DataAugmenter instance or None): type of data augmentation to use
         """
         super(NMT, self).__init__()
-        self.model_embeddings = ModelEmbeddings(embed_size=embed_size)
         self.embed_size = embed_size
         self.hidden_size = hidden_size
         self.num_classes = num_classes
@@ -54,24 +54,25 @@ class NMT(nn.Module):
         self.dropout = nn.Dropout(dropout_rate)
 
 
-    def embed_and_augment_data(self, sentences, sentiments):
-        sentences_embedded, sentences_length = self.model_embeddings.embed_sentence(
-            sentences, self.device
-        )
+    def pad_and_pack_data(self, sentences):
+        '''
+        @param sentences: List[embedded_vectors], each is a numpy array
+        '''
+        
+        sentences_length = list(map(len, sentences))
+        max_len = max(sentences_length)
 
-        if self.data_augmenter is not None:
-            sentences_embedded, sentences_length, sentiments = self.data_augmenter.augment(sentences_embedded,
-                                                                                        sentences_length,
-                                                                                        sentiments)
+        sentences_padded = [np.pad(s, ((0, max_len - len(s)), (0, 0))) for s in sentences]
+        sentences_padded = torch.Tensor(sentences_padded, device=self.device).permute(1, 0, 2)
 
         sentences_packed = pack_padded_sequence(
-            sentences_embedded, sentences_length, enforce_sorted=False
+            sentences_padded, sentences_length, enforce_sorted=False
         )
 
-        return sentences_packed, sentiments
+        return sentences_packed
 
 
-    def forward(self, sents: List[List[str]], sentiments: List[int]) -> torch.Tensor:
+    def forward(self, sents: List[np.ndarray], sentiments: List[int]) -> torch.Tensor:
         """ Take a mini-batch of sentences along with the associated sentiments. Outputs
         log-likelihood of each (sentence, sentiment) pair.
 
@@ -81,7 +82,7 @@ class NMT(nn.Module):
         @returns scores (Tensor): a variable/tensor of shape (batch_size, ) representing the
                                     log-likelihood of generating the correct sentiment
         """
-        sentences_packed, sentiments = self.embed_and_augment_data(sents, sentiments)
+        sentences_packed = self.pad_and_pack_data(sents)
         probs = self.step(sentences_packed)
         scores = probs[range(len(sentiments)), sentiments].log()
         return scores
@@ -104,12 +105,7 @@ class NMT(nn.Module):
 
     def predict(self, sentences):
         # DO NOT augment data here
-        sentences_embedded, sentences_length = self.model_embeddings.embed_sentence(
-            sentences, self.device
-        )
-        sentences_packed = pack_padded_sequence(
-            sentences_embedded, sentences_length, enforce_sorted=False
-        )
+        sentences_packed = self.pad_and_pack_data(sentences)
         probs = self.step(sentences_packed)
         predictions = torch.argmax(probs, dim=-1)
         return predictions

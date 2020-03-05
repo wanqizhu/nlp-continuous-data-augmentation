@@ -3,7 +3,6 @@
 
 import numpy as np
 import torch
-from utils import pad_sents
 
 
 class ModelEmbeddings:
@@ -36,12 +35,11 @@ class ModelEmbeddings:
         self.embeddings = np.array(embeddings, dtype=float)
         print("embeddings shape", self.embeddings.shape)
 
-    def embed_sentence(self, sents, device):
+    def embed_sentence(self, sents):
         """
         sents: List[List[str]] of length batch_size, and variable sentence length inside
 
-        @returns: sentences: tensor of (max_sentence_length, batch_size, embed_size)
-        @returns: sent_lengths: list of (batch_size)
+        @returns: sentences: List of length batch_size of numpy arrays w/ shape (variable_sentence_length, embed_size)
         """
 
         # print(sents)
@@ -51,14 +49,7 @@ class ModelEmbeddings:
             [self.word_to_idx[wd] if wd in self.word_to_idx else 0 for wd in sent]
             for sent in sents
         ]
-        sents_padded = pad_sents(sentsIdx, 0)
-        sents_padded = np.array(sents_padded)
-
-        sent_lengths = [len(s) for s in sents]
-        sents_embedded = self.embeddings[sents_padded.T]
-        # print(sents_embedded.shape)
-        return (
-            torch.tensor(sents_embedded, dtype=torch.float, device=device),
-            sent_lengths,
-        )
+        sents_embedded = [self.embeddings[s] for s in sentsIdx]
+        
+        return sents_embedded
 

@@ -1,15 +1,23 @@
+from model_embeddings import ModelEmbeddings
 
-def BaseDataAugmenter():
-    def __init__(self):
-        pass
 
-    def augment(self, sentences_embedded, sentences_length, sentiments):
+class BaseDataAugmenter:
+    def __init__(self, embed_size):
+        self.model_embeddings = ModelEmbeddings(embed_size=embed_size)
+
+    def augment(self, raw_train_data):
         '''
-        @param sentences_embedded: Tensor of shape (max_sentence_length, batch_size, embed_size)
-        @param sentences_length: List of ints of length (batch_size)
-        @sentiments: List of labels (0-5) of length (batch_size)
-
-        @return: the above three variables, with possibly extended BATCH_SIZE
+        @param raw_train_data: (List[List[words]], List[sentiment])
+        
+        @return: List[(embedded_vectors, sentiment)], with possibly extended BATCH_SIZE
         '''
 
-        return sentences_embedded, sentences_length, sentiments
+        sentences, sentiments = raw_train_data
+        sentences_embedded = self.model_embeddings.embed_sentence(sentences)
+
+        return list(zip(sentences_embedded, sentiments))
+
+
+
+class GaussianNoiseDataAugmenter:
+    pass

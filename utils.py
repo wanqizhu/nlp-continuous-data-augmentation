@@ -19,28 +19,23 @@ import torch.nn.functional as F
 import pytreebank
 
 
-def pad_sents(sents, pad_token):
-    """ Pad list of sentences according to the longest sentence in the batch.
-        The paddings should be at the end of each sentence.
-    @param sents (list[list[str]]): list of sentences, where each sentence
-                                    is represented as a list of words
-    @param pad_token (str): padding token
-    @returns sents_padded (list[list[str]]): list of sentences where sentences shorter
-        than the max length sentence are padded out with the pad_token, such that
-        each sentences in the batch now has equal length.
-    """
-    sents_padded = []
+# def pad_sents(sents, pad_token):
+#     """ Pad list of sentences according to the longest sentence in the batch.
+#         The paddings should be at the end of each sentence.
+#     @param sents (list[list[str]]): list of sentences, where each sentence
+#                                     is represented as a list of words
+#     @param pad_token (str): padding token
+#     @returns sents_padded (list[list[str]]): list of sentences where sentences shorter
+#         than the max length sentence are padded out with the pad_token, such that
+#         each sentences in the batch now has equal length.
+#     """
+#     sents_padded = []
 
-    ### YOUR CODE HERE (~6 Lines)
-    max_len = max(map(len, sents))
-    sents_padded = [s + [pad_token] * (max_len - len(s))
-                    for s in sents]
+#     max_len = max(map(len, sents))
+#     sents_padded = [s + [pad_token] * (max_len - len(s))
+#                     for s in sents]
 
-
-    ### END YOUR CODE
-
-    return sents_padded
-
+#     return sents_padded
 
 
 def load_training_data(perct=1., dev_perct=1.):
@@ -71,7 +66,7 @@ def load_training_data(perct=1., dev_perct=1.):
     X_dev = X_dev[:dev_size]
     Y_dev = Y_dev[:dev_size]
 
-    return list(zip(X, Y)), list(zip(X_dev, Y_dev))
+    return (X, Y), (X_dev, Y_dev)
 
 
 def load_test_data(perct=1.):
@@ -93,7 +88,7 @@ def load_test_data(perct=1.):
     X = X[:test_size]
     Y = Y[:test_size]
 
-    return list(zip(X, Y))
+    return (X, Y)
 
 
 def batch_iter(data, batch_size, shuffle=False):

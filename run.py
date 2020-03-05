@@ -95,6 +95,7 @@ def test(args):
         model = model.to(torch.device("cuda:0"))
 
     test_data = load_test_data()
+    test_data = BaseDataAugmenter(int(args["--embed-size"])).augment(test_data)
     batch_size = int(args["--batch-size"])
 
     cum_correct = 0
@@ -122,18 +123,18 @@ def train(args: Dict):
     train_data, dev_data = load_training_data(perct=float(args['--train-perct']), 
                                               dev_perct=float(args['--dev-perct']))
 
-    # TODO: compute distribution
-    train_d = defaultdict(int)
-    dev_d = defaultdict(int)
-    for train in train_data:
-        train_d[train[1]] += 1
-    for dev in dev_data:
-        dev_d[dev[1]] += 1
+    # # TODO: compute distribution
+    # train_d = defaultdict(int)
+    # dev_d = defaultdict(int)
+    # for train in train_data:
+    #     train_d[train[1]] += 1
+    # for dev in dev_data:
+    #     dev_d[dev[1]] += 1
 
-    print('train size', len(train_data))
-    print('train class distributions', train_d)
-    print('dev size', len(dev_data))
-    print('dev class distributions', dev_d)
+    # print('train size', len(train_data))
+    # print('train class distributions', train_d)
+    # print('dev size', len(dev_data))
+    # print('dev class distributions', dev_d)
 
 
     train_batch_size = int(args["--batch-size"])
@@ -142,15 +143,20 @@ def train(args: Dict):
     log_every = int(args["--log-every"])
     model_save_path = args["--save-to"]
 
-    # TODO: load data_augmenter based on args
-    data_augmenter = BaseDataAugmenter()
+    # TODO: load train data_augmenter based on args
+    data_augmenter = BaseDataAugmenter(int(args["--embed-size"]))
+    dev_data_augmenter = BaseDataAugmenter(int(args["--embed-size"]))  # just embed no augmentation
+
+
+    # perform augmentation
+    train_data_aug = data_augmenter.augment(train_data)
+    dev_data_aug = dev_data_augmenter.augment(dev_data)
 
     model = NMT(
         embed_size=int(args["--embed-size"]),
         hidden_size=int(args["--hidden-size"]),
         num_classes=int(args["--num-classes"]),
-        dropout_rate=float(args["--dropout"]),
-        data_augmenter=data_augmenter
+        dropout_rate=float(args["--dropout"])
     )
     model.train()
 
@@ -182,7 +188,7 @@ def train(args: Dict):
         epoch += 1
 
         for sentences, sentiments in batch_iter(
-            train_data, batch_size=train_batch_size, shuffle=True
+            train_data_aug, batch_size=train_batch_size, shuffle=True
         ):
             train_iter += 1
 
@@ -241,7 +247,7 @@ def train(args: Dict):
 
                 # compute dev
                 dev_score, dev_accuracy = evaluate_dev(
-                    model, dev_data, batch_size=5000
+                    model, dev_data_aug, batch_size=5000
                 )  # dev batch size can be a bit larger
                 valid_metric = dev_score  # maybe use accuracy instead?
 
@@ -255,7 +261,7 @@ def train(args: Dict):
                 )
                 hist_valid_scores.append(valid_metric)
 
-                train_score = evaluate_dev(model, train_data, batch_size=100000)
+                # train_score = evaluate_dev(model, train_data_aug, batch_size=100000)
 
                 # see some trainig examples
                 # with torch.no_grad():
