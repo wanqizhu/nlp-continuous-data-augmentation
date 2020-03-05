@@ -75,7 +75,7 @@ def evaluate_dev(model, dev_data, batch_size):
     # no_grad() signals backend to throw away all gradients
     with torch.no_grad():
         for sentences, sentiments in batch_iter(dev_data, batch_size):
-            score = model(sentences, sentiments).sum()
+            score = -model(sentences, sentiments).sum()
             cum_score += score.item()
             cum_correct += model.compute_accuracy(sentences, sentiments) * len(
                 sentences
@@ -257,7 +257,7 @@ def train(args: Dict):
                 dev_score, dev_accuracy = evaluate_dev(
                     model, dev_data, batch_size=5000
                 )  # dev batch size can be a bit larger
-                valid_metric = dev_score  # maybe use accuracy instead?
+                valid_metric = -dev_score  # maybe use accuracy instead?
 
                 print_and_write(
                     "validation: iter %d, dev. score %f, dev. accuracy %f"
