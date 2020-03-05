@@ -278,28 +278,6 @@ def train(args: Dict):
 
                 # train_score = evaluate_dev(model, train_data, batch_size=100000)
 
-                # see some trainig examples
-                # with torch.no_grad():
-                #     print("[training] sample predictions")
-                #     # print("sent\t true sentiment\t predicted sentiment")
-                #     sents = sentences[:5]
-                #     sentis = sentiments[:5]
-                #     predictions = model.predict(sents)
-                #     probabilities = model.step(sents)
-
-                #     for i in range(5):
-                #         print(
-                #             # " ".join(sents[i]),
-                #             sentis[i],
-                #             predictions[i],
-                #             probabilities[i],
-                #         )
-
-                #     counts = defaultdict(int)
-                #     for pred in predictions:
-                #         counts[int(pred)] += 1
-                #     print(counts)
-
                 if is_better:
                     patience = 0
                     print_and_write(
