@@ -20,6 +20,8 @@ Options:
     --dev-src=<file>                        dev source file
     --dev-tgt=<file>                        dev target file
     --data-aug=<string>                     data augmentation method [default: "None"]
+    --data-aug-amount=<float>               data augmentation amount [default: 0.01]
+    --data-aug-nx=<int>                     data augmentation niters size [default: 4]
     --seed=<int>                            seed [default: 0]
     --batch-size=<int>                      batch size [default: 32]
     --num-classes=<int>                     num classes in sentiment prediction [default: 5]
@@ -75,7 +77,7 @@ def evaluate_dev(model, dev_data, batch_size):
     # no_grad() signals backend to throw away all gradients
     with torch.no_grad():
         for sentences, sentiments in batch_iter(dev_data, batch_size):
-            score = model(sentences, sentiments).sum()
+            score = -model(sentences, sentiments).sum()
             cum_score += score.item()
             cum_correct += model.compute_accuracy(sentences, sentiments) * len(
                 sentences
@@ -129,15 +131,28 @@ def train(args: Dict):
     f_long = open(long_logfile, "w")
     f_train = open(train_logfile, "w")
     # TODO: add hyperparameters
-    f_train.write("#args: %s" % args)
+    args_tuples = [(arg, args[arg]) for arg in args]
+    f_train.write("#args_tuples: %s\n" % args_tuples)
+    for (arg, val) in args_tuples:
+        f_train.write("#%s: %s\n" % (arg, val))
     f_train.write("#epoch, train iter, train score\n")
     f_dev = open(dev_logfile, "w")
     f_dev.write("#epoch, train iter, dev score, dev accuracy\n")
 
-    # TODO
-    train_data = load_train_data(perct=float(args['--train-perct'])) 
-    dev_data = load_dev_data(dev_perct=float(args['--dev-perct']))
+    train_data = load_train_data(perct=float(args["--train-perct"]))
+    dev_data = load_dev_data(dev_perct=float(args["--dev-perct"]))
 
+    # compute train and dev distributions
+    train_d = defaultdict(int)
+    dev_d = defaultdict(int)
+    # for train in train_data:
+    #     train_d[train[1]] += 1
+    # for dev in dev_data:
+    #     dev_d[dev[1]] += 1
+    # print_and_write("train size %d" % len(train_data), f_long)
+    # print_and_write("train class distributions %s" % train_d, f_long)
+    # print_and_write("dev size %d" % len(dev_data), f_long)
+    # print_and_write("dev class distributions %s" % dev_d, f_long)
 
     train_batch_size = int(args["--batch-size"])
     clip_grad = float(args["--clip-grad"])
@@ -148,10 +163,11 @@ def train(args: Dict):
     embed_size = int(args["--embed-size"])
 
     # TODO: load train data_augmenter based on args
-    data_augmenter = str(args["--data-aug"])
+    data_augmenter = str(args["--data-aug"]).lower()
     print_and_write("Using data augmentation method: %s" % data_augmenter, f_long)
     if data_augmenter == "gaussian":
-        data_augmenter = GaussianNoiseDataAugmenter()
+        data_augmenter = GaussianNoiseDataAugmenter(float(args["--data-aug-amount"]),
+                                                    int(args["--data-aug-nx"]))
     else:
         data_augmenter = BaseDataAugmenter()
 
@@ -161,13 +177,12 @@ def train(args: Dict):
         "train size: %d, after aug %d" % (len(train_data[0]), len(train_data_aug)),
         f_long,
     )
-    dev_data_aug = dev_data_augmenter.augment(dev_data)
 
     model = NMT(
         embed_size=embed_size,
         hidden_size=int(args["--hidden-size"]),
         num_classes=int(args["--num-classes"]),
-        dropout_rate=float(args["--dropout"])
+        dropout_rate=float(args["--dropout"]),
     )
     model.train()
 
@@ -257,7 +272,7 @@ def train(args: Dict):
                 dev_score, dev_accuracy = evaluate_dev(
                     model, dev_data, batch_size=5000
                 )  # dev batch size can be a bit larger
-                valid_metric = dev_score  # maybe use accuracy instead?
+                valid_metric = -dev_score  # maybe use accuracy instead?
 
                 print_and_write(
                     "validation: iter %d, dev. score %f, dev. accuracy %f"
@@ -274,28 +289,6 @@ def train(args: Dict):
                 hist_valid_scores.append(valid_metric)
 
                 # train_score = evaluate_dev(model, train_data, batch_size=100000)
-
-                # see some trainig examples
-                # with torch.no_grad():
-                #     print("[training] sample predictions")
-                #     # print("sent\t true sentiment\t predicted sentiment")
-                #     sents = sentences[:5]
-                #     sentis = sentiments[:5]
-                #     predictions = model.predict(sents)
-                #     probabilities = model.step(sents)
-
-                #     for i in range(5):
-                #         print(
-                #             # " ".join(sents[i]),
-                #             sentis[i],
-                #             predictions[i],
-                #             probabilities[i],
-                #         )
-
-                #     counts = defaultdict(int)
-                #     for pred in predictions:
-                #         counts[int(pred)] += 1
-                #     print(counts)
 
                 if is_better:
                     patience = 0
