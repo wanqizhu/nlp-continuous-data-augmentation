@@ -86,8 +86,10 @@ def load_test_data(embed_size=50, perct=1., binary=False):
     Y = [labeledTree.to_labeled_lines()[0][0] for labeledTree in data['test']]
 
     if binary:
+        print("train size binary reduce: ", len(X))
         X = [x for (x, y) in list(zip(X, Y)) if y != 3]
         Y = [1 if y > 3 else 0 for y in Y if y != 3]
+        print(" --> ", len(X))
  
     test_size = int(len(X) * perct)
     X = X[:test_size]
