@@ -44,8 +44,8 @@ class NoisyIdentityDataAugmenter(BaseDataAugmenter):
     def augment(self, embedded_training_data):
         sentences, sentiments = embedded_training_data
 
-        s = s.shape[1]
-        _id = np.identity(s)
+        size = sentences[0].shape[1]
+        _id = np.identity(size)
 
         sentences = sentences + [np.matmul(s, _id + np.random.normal(scale=self.std, size=_id.shape))
                                                     for s in (sentences*self.niters)]

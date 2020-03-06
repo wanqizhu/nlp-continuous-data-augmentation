@@ -58,8 +58,7 @@ from typing import List, Tuple, Dict, Set, Union
 from tqdm import tqdm
 from utils import batch_iter, load_train_data, load_dev_data, load_test_data
 from collections import defaultdict
-from data_augmenter import BaseDataAugmenter, GaussianNoiseDataAugmenter,
-                           NoisyIdentityDataAugmenter
+from data_augmenter import BaseDataAugmenter, GaussianNoiseDataAugmenter, NoisyIdentityDataAugmenter
 
 import torch
 import torch.nn.utils
