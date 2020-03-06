@@ -50,7 +50,7 @@ from typing import List, Tuple, Dict, Set, Union
 from tqdm import tqdm
 from utils import batch_iter, load_train_data, load_dev_data, load_test_data
 from collections import defaultdict
-from data_augmenter import BaseDataAugmenter, GaussianNoiseDataAugmenter, NoisyIdentityDataAugmenter
+from data_augmenter import BaseDataAugmenter, GaussianNoiseDataAugmenter, NoisyIdentityDataAugmenter, EmbedDimensionSwapDataAugmenter
 
 import torch
 import torch.nn.utils
@@ -154,6 +154,9 @@ def train(args: Dict):
     elif data_augmenter == "identity":
         data_augmenter = NoisyIdentityDataAugmenter(float(args["--data-aug-amount"]),
                                                     int(args["--data-aug-nx"]))
+    elif data_augmenter == "swapdim":
+        data_augmenter = EmbedDimensionSwapDataAugmenter(int(args["--data-aug-amount"]),
+                                                         int(args["--data-aug-nx"]))
     else:
         data_augmenter = BaseDataAugmenter()
 
