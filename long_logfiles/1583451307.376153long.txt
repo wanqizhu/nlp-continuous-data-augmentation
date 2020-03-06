@@ -1,0 +1,31 @@
+Using data augmentation method: "none"
+train size: 1708, after aug 1708
+uniformly initialize parameters [-0.100000, +0.100000]
+use device: cpu
+confirming model device cpu
+begin Maximum Likelihood training
+epoch 1, iter 50, avg. loss 1.58, cum. examples 1600, time elapsed 2.07 sec
+epoch 2, iter 100, avg. loss 1.36, cum. examples 3180, time elapsed 4.01 sec
+begin validation ...
+validation: iter 100, dev. score 1.820082, dev. accuracy 0.253406
+save currently the best model to [model.bin]
+epoch 3, iter 150, avg. loss 1.29, cum. examples 1580, time elapsed 6.84 sec
+epoch 4, iter 200, avg. loss 1.27, cum. examples 3160, time elapsed 8.84 sec
+begin validation ...
+validation: iter 200, dev. score 1.886178, dev. accuracy 0.253406
+hit patience 1
+epoch 5, iter 250, avg. loss 1.27, cum. examples 1580, time elapsed 11.65 sec
+epoch 6, iter 300, avg. loss 1.29, cum. examples 3160, time elapsed 13.29 sec
+begin validation ...
+validation: iter 300, dev. score 1.911676, dev. accuracy 0.253406
+hit patience 2
+epoch 7, iter 350, avg. loss 1.27, cum. examples 1580, time elapsed 15.76 sec
+epoch 8, iter 400, avg. loss 1.25, cum. examples 3160, time elapsed 17.49 sec
+begin validation ...
+validation: iter 400, dev. score 1.810382, dev. accuracy 0.253406
+save currently the best model to [model.bin]
+epoch 9, iter 450, avg. loss 1.22, cum. examples 1580, time elapsed 20.13 sec
+epoch 10, iter 500, avg. loss 1.22, cum. examples 3160, time elapsed 21.84 sec
+begin validation ...
+validation: iter 500, dev. score 1.794099, dev. accuracy 0.260672
+save currently the best model to [model.bin]
