@@ -1,0 +1,36 @@
+#args_tuples: [('train', True), ('--dev-tgt', None), ('--dev-src', None), ('--train-perct', '0.2'), ('--seed', '0'), ('--patience', '5'), ('--num-classes', '5'), ('--max-epoch', '30'), ('--log-every', '50'), ('--cuda', False), ('--sample-size', '5'), ('--dropout', '0.3'), ('--valid-niter', '100'), ('--clip-grad', '5.0'), ('--data-aug-amount', '0.01'), ('--data-aug-nx', '4'), ('--hidden-size', '10'), ('--lr-decay', '0.5'), ('--train-src', None), ('--beam-size', '5'), ('--uniform-init', '0.1'), ('--max-decoding-time-step', '70'), ('--max-num-trial', '5'), ('--data-aug', 'identity'), ('--help', False), ('--train-tgt', None), ('--embed-size', '50'), ('--dev-perct', '1.0'), ('--input-feed', False), ('--save-to', 'model.bin'), ('--lr', '0.001'), ('--batch-size', '32'), ('test', False), ('MODEL_PATH', None)]
+#train: True
+#--dev-tgt: None
+#--dev-src: None
+#--train-perct: 0.2
+#--seed: 0
+#--patience: 5
+#--num-classes: 5
+#--max-epoch: 30
+#--log-every: 50
+#--cuda: False
+#--sample-size: 5
+#--dropout: 0.3
+#--valid-niter: 100
+#--clip-grad: 5.0
+#--data-aug-amount: 0.01
+#--data-aug-nx: 4
+#--hidden-size: 10
+#--lr-decay: 0.5
+#--train-src: None
+#--beam-size: 5
+#--uniform-init: 0.1
+#--max-decoding-time-step: 70
+#--max-num-trial: 5
+#--data-aug: identity
+#--help: False
+#--train-tgt: None
+#--embed-size: 50
+#--dev-perct: 1.0
+#--input-feed: False
+#--save-to: model.bin
+#--lr: 0.001
+#--batch-size: 32
+#test: False
+#MODEL_PATH: None
+#epoch, train iter, train score
