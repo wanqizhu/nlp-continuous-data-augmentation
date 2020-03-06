@@ -1,0 +1,98 @@
+Using data augmentation method: identity
+train size: 1708, after aug 8540
+uniformly initialize parameters [-0.100000, +0.100000]
+use device: cpu
+confirming model device cpu
+begin Maximum Likelihood training
+epoch 1, iter 50, avg. loss 1.58, cum. examples 1600, time elapsed 1.94 sec
+epoch 1, iter 100, avg. loss 1.32, cum. examples 3200, time elapsed 3.76 sec
+begin validation ...
+validation: iter 100, dev. score 1.883229, dev. accuracy 0.253406
+save currently the best model to [model.bin]
+epoch 1, iter 150, avg. loss 1.31, cum. examples 1600, time elapsed 6.44 sec
+epoch 1, iter 200, avg. loss 1.28, cum. examples 3200, time elapsed 8.28 sec
+begin validation ...
+validation: iter 200, dev. score 1.896992, dev. accuracy 0.253406
+hit patience 1
+epoch 1, iter 250, avg. loss 1.29, cum. examples 1600, time elapsed 10.90 sec
+epoch 2, iter 300, avg. loss 1.25, cum. examples 3196, time elapsed 12.63 sec
+begin validation ...
+validation: iter 300, dev. score 1.907160, dev. accuracy 0.253406
+hit patience 2
+epoch 2, iter 350, avg. loss 1.26, cum. examples 1600, time elapsed 15.24 sec
+epoch 2, iter 400, avg. loss 1.25, cum. examples 3200, time elapsed 16.97 sec
+begin validation ...
+validation: iter 400, dev. score 1.789739, dev. accuracy 0.260672
+save currently the best model to [model.bin]
+epoch 2, iter 450, avg. loss 1.22, cum. examples 1600, time elapsed 19.61 sec
+epoch 2, iter 500, avg. loss 1.20, cum. examples 3200, time elapsed 21.37 sec
+begin validation ...
+validation: iter 500, dev. score 1.865154, dev. accuracy 0.264305
+hit patience 1
+epoch 3, iter 550, avg. loss 1.22, cum. examples 1596, time elapsed 23.98 sec
+epoch 3, iter 600, avg. loss 1.22, cum. examples 3196, time elapsed 25.76 sec
+begin validation ...
+validation: iter 600, dev. score 1.813271, dev. accuracy 0.267030
+hit patience 2
+epoch 3, iter 650, avg. loss 1.20, cum. examples 1600, time elapsed 28.33 sec
+epoch 3, iter 700, avg. loss 1.20, cum. examples 3200, time elapsed 30.05 sec
+begin validation ...
+validation: iter 700, dev. score 1.793887, dev. accuracy 0.262489
+hit patience 3
+epoch 3, iter 750, avg. loss 1.18, cum. examples 1600, time elapsed 32.60 sec
+epoch 3, iter 800, avg. loss 1.18, cum. examples 3200, time elapsed 34.43 sec
+begin validation ...
+validation: iter 800, dev. score 1.927777, dev. accuracy 0.258856
+hit patience 4
+epoch 4, iter 850, avg. loss 1.20, cum. examples 1596, time elapsed 37.14 sec
+epoch 4, iter 900, avg. loss 1.16, cum. examples 3196, time elapsed 38.93 sec
+begin validation ...
+validation: iter 900, dev. score 1.850147, dev. accuracy 0.261580
+hit patience 5
+hit #1 trial
+load previously best model and decay learning rate to 0.000500
+restore parameters of the optimizers
+epoch 4, iter 950, avg. loss 1.23, cum. examples 1600, time elapsed 41.56 sec
+epoch 4, iter 1000, avg. loss 1.23, cum. examples 3200, time elapsed 43.47 sec
+begin validation ...
+validation: iter 1000, dev. score 1.808545, dev. accuracy 0.263397
+hit patience 1
+epoch 4, iter 1050, avg. loss 1.22, cum. examples 1600, time elapsed 46.24 sec
+epoch 5, iter 1100, avg. loss 1.18, cum. examples 3196, time elapsed 48.03 sec
+begin validation ...
+validation: iter 1100, dev. score 1.856872, dev. accuracy 0.264305
+hit patience 2
+epoch 5, iter 1150, avg. loss 1.19, cum. examples 1600, time elapsed 50.62 sec
+epoch 5, iter 1200, avg. loss 1.20, cum. examples 3200, time elapsed 52.43 sec
+begin validation ...
+validation: iter 1200, dev. score 1.842739, dev. accuracy 0.259764
+hit patience 3
+epoch 5, iter 1250, avg. loss 1.18, cum. examples 1600, time elapsed 55.19 sec
+epoch 5, iter 1300, avg. loss 1.21, cum. examples 3200, time elapsed 57.06 sec
+begin validation ...
+validation: iter 1300, dev. score 1.850774, dev. accuracy 0.257947
+hit patience 4
+epoch 6, iter 1350, avg. loss 1.23, cum. examples 1596, time elapsed 59.64 sec
+epoch 6, iter 1400, avg. loss 1.19, cum. examples 3196, time elapsed 61.48 sec
+begin validation ...
+validation: iter 1400, dev. score 1.817809, dev. accuracy 0.262489
+hit patience 5
+hit #2 trial
+load previously best model and decay learning rate to 0.000250
+restore parameters of the optimizers
+epoch 6, iter 1450, avg. loss 1.22, cum. examples 1600, time elapsed 64.10 sec
+epoch 6, iter 1500, avg. loss 1.22, cum. examples 3200, time elapsed 65.90 sec
+begin validation ...
+validation: iter 1500, dev. score 1.790367, dev. accuracy 0.263397
+hit patience 1
+epoch 6, iter 1550, avg. loss 1.22, cum. examples 1600, time elapsed 68.52 sec
+epoch 6, iter 1600, avg. loss 1.21, cum. examples 3200, time elapsed 70.33 sec
+begin validation ...
+validation: iter 1600, dev. score 1.814960, dev. accuracy 0.259764
+hit patience 2
+epoch 7, iter 1650, avg. loss 1.19, cum. examples 1596, time elapsed 72.98 sec
+epoch 7, iter 1700, avg. loss 1.22, cum. examples 3196, time elapsed 74.74 sec
+begin validation ...
+validation: iter 1700, dev. score 1.824071, dev. accuracy 0.259764
+hit patience 3
+epoch 7, iter 1750, avg. loss 1.21, cum. examples 1600, time elapsed 77.46 sec
