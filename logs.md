@@ -28,3 +28,13 @@ loss: -1.415662
 
 ccuracy: 0.369231
 loss: -1.425623
+
+20_hidden_identity_0.2_std_10x
+
+accuracy: 0.364706
+loss: -1.450557
+
+20_hidden_identity_0.1_std_10x
+
+accuracy: 0.371946
+loss: -1.427532
