@@ -40,6 +40,11 @@ loss: -1.442878
 ccuracy: 0.369231
 loss: -1.425623
 
+seed=2
+
+accuracy: 0.357014
+loss: 1.434240
+
 # 20_hidden_identity_0.2_std_10x
 
 accuracy: 0.364706
@@ -59,15 +64,10 @@ seed=1
 accuracy: 0.372398
 loss: 1.427621
 
-<<<<<<< HEAD
 seed=2
 
 accuracy: 0.365158
 loss: 1.422009
-
-20_hidden_identity_0.05_std_10x
-=======
->>>>>>> c0089c39484f65398ddff2d06d252250d3c57dd4
 
 # 20_hidden_identity_0.05_std_10x
 
