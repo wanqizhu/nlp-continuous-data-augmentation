@@ -101,7 +101,7 @@ def test(args):
         for sentences, sentiments in batch_iter(test_data, batch_size):
             correct = model.compute_accuracy(sentences, sentiments) * len(sentences)
             cum_correct += correct
-            score = model(sentences, sentiments).sum()
+            score = -model(sentences, sentiments).sum()
             cum_score += score
 
     print("test dataset size: %d" % len(test_data))
