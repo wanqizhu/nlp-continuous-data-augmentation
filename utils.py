@@ -23,7 +23,7 @@ data = pytreebank.load_sst()
 
     
 
-def load_train_data(embed_size=50, perct=1.):
+def load_train_data(embed_size=50, perct=1., binary=False):
     '''
     labeledTree.to_labeled_lines()[0] gives you a single sentence and its labeling
 
@@ -38,6 +38,10 @@ def load_train_data(embed_size=50, perct=1.):
     M = ModelEmbeddings(embed_size=embed_size)
     X = [labeledTree.to_labeled_lines()[0][1].split(" ") for labeledTree in data['train']]
     Y = [labeledTree.to_labeled_lines()[0][0] for labeledTree in data['train']]
+
+    if binary:
+        X = [x for (x, y) in list(zip(X, Y)) if y != 3]
+        Y = [1 if y > 3 else 0 for y in Y if y != 3]
     
     train_size = int(len(X) * perct)
     X = X[:train_size]
@@ -47,22 +51,26 @@ def load_train_data(embed_size=50, perct=1.):
     return (X, Y)
 
 
-def load_dev_data(embed_size=50, dev_perct=1.):
+def load_dev_data(embed_size=50, dev_perct=1., binary=False):
     M = ModelEmbeddings(embed_size=embed_size)
-    X_dev = [labeledTree.to_labeled_lines()[0][1].split(" ") for labeledTree in data['dev']]
-    Y_dev = [labeledTree.to_labeled_lines()[0][0] for labeledTree in data['dev']]
+    X = [labeledTree.to_labeled_lines()[0][1].split(" ") for labeledTree in data['dev']]
+    Y = [labeledTree.to_labeled_lines()[0][0] for labeledTree in data['dev']]
     
-    dev_size = int(len(X_dev) * dev_perct)
-    X_dev = X_dev[:dev_size]
-    Y_dev = Y_dev[:dev_size]
-    X_dev = M.embed_sentence(X_dev)
+    if binary:
+        X = [x for (x, y) in list(zip(X, Y)) if y != 3]
+        Y = [1 if y > 3 else 0 for y in Y if y != 3]
+ 
+    dev_size = int(len(X) * dev_perct)
+    X = X[:dev_size]
+    Y = Y[:dev_size]
+    X = M.embed_sentence(X)
 
     # dev data doesn't need to be augmented, hence it's already zipped and 
     # ready to be passed into model.forward()
-    return list(zip(X_dev, Y_dev))  
+    return list(zip(X, Y))  
 
 
-def load_test_data(embed_size=50, perct=1.):
+def load_test_data(embed_size=50, perct=1., binary=False):
     '''
     labeledTree.to_labeled_lines()[0] gives you a single sentence and its labeling
 
@@ -77,6 +85,10 @@ def load_test_data(embed_size=50, perct=1.):
     X = [labeledTree.to_labeled_lines()[0][1].split(" ") for labeledTree in data['test']]
     Y = [labeledTree.to_labeled_lines()[0][0] for labeledTree in data['test']]
 
+    if binary:
+        X = [x for (x, y) in list(zip(X, Y)) if y != 3]
+        Y = [1 if y > 3 else 0 for y in Y if y != 3]
+ 
     test_size = int(len(X) * perct)
     X = X[:test_size]
     Y = Y[:test_size]
