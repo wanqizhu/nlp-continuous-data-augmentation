@@ -3,6 +3,7 @@ import numpy as np
 import sys
 import os
 
+fig, axs = plt.subplots(2)
 
 if len(sys.argv) == 1:  # no args
     filenames = ['train_logfiles/' + sorted(os.listdir('train_logfiles'))[-1],
@@ -16,12 +17,11 @@ for filename in filenames:
 
     iter_num = f[:, 1]
     loss = f[:, 2]
-    plt.plot(iter_num, loss, label='loss_' + filename)
+    axs[0].plot(iter_num, loss, label='loss_' + filename)
     if f.shape[1] > 3:
         accuracy = f[:, 3]
-        plt.plot(iter_num, accuracy, label='accuracy_' + filename)
+        axs[1].plot(iter_num, accuracy, label='accuracy_' + filename)
 
 
-plt.legend()
-# plt.show()
-plt.savefig('graph_out.jpg')
+fig.legend()
+fig.savefig('graph_out.png')
