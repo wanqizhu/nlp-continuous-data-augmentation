@@ -1,0 +1,594 @@
+Using data augmentation method: identity
+train size: 8544, after aug 85440
+uniformly initialize parameters [-0.100000, +0.100000]
+use device: cuda:0
+confirming model device cuda:0
+begin Maximum Likelihood training
+epoch 1, iter 50, avg. loss 1.59, cum. examples 1600, time elapsed 0.92 sec
+epoch 1, iter 100, avg. loss 1.57, cum. examples 3200, time elapsed 1.83 sec
+epoch 1, iter 150, avg. loss 1.56, cum. examples 4800, time elapsed 2.74 sec
+epoch 1, iter 200, avg. loss 1.57, cum. examples 6400, time elapsed 3.63 sec
+begin validation ...
+validation: iter 200, dev. score 1.560388, dev. accuracy 0.296094
+save currently the best model to [model.bin]
+epoch 1, iter 250, avg. loss 1.56, cum. examples 1600, time elapsed 5.29 sec
+epoch 1, iter 300, avg. loss 1.54, cum. examples 3200, time elapsed 6.20 sec
+epoch 1, iter 350, avg. loss 1.56, cum. examples 4800, time elapsed 7.12 sec
+epoch 1, iter 400, avg. loss 1.54, cum. examples 6400, time elapsed 8.03 sec
+begin validation ...
+validation: iter 400, dev. score 1.511323, dev. accuracy 0.317893
+save currently the best model to [model.bin]
+epoch 1, iter 450, avg. loss 1.54, cum. examples 1600, time elapsed 9.69 sec
+epoch 1, iter 500, avg. loss 1.54, cum. examples 3200, time elapsed 10.58 sec
+epoch 1, iter 550, avg. loss 1.54, cum. examples 4800, time elapsed 11.48 sec
+epoch 1, iter 600, avg. loss 1.53, cum. examples 6400, time elapsed 12.39 sec
+begin validation ...
+validation: iter 600, dev. score 1.488757, dev. accuracy 0.338783
+save currently the best model to [model.bin]
+epoch 1, iter 650, avg. loss 1.53, cum. examples 1600, time elapsed 14.03 sec
+epoch 1, iter 700, avg. loss 1.53, cum. examples 3200, time elapsed 14.95 sec
+epoch 1, iter 750, avg. loss 1.53, cum. examples 4800, time elapsed 15.86 sec
+epoch 1, iter 800, avg. loss 1.53, cum. examples 6400, time elapsed 16.77 sec
+begin validation ...
+validation: iter 800, dev. score 1.487375, dev. accuracy 0.337875
+save currently the best model to [model.bin]
+epoch 1, iter 850, avg. loss 1.54, cum. examples 1600, time elapsed 18.41 sec
+epoch 1, iter 900, avg. loss 1.53, cum. examples 3200, time elapsed 19.34 sec
+epoch 1, iter 950, avg. loss 1.50, cum. examples 4800, time elapsed 20.25 sec
+epoch 1, iter 1000, avg. loss 1.50, cum. examples 6400, time elapsed 21.15 sec
+begin validation ...
+validation: iter 1000, dev. score 1.466649, dev. accuracy 0.346957
+save currently the best model to [model.bin]
+epoch 1, iter 1050, avg. loss 1.52, cum. examples 1600, time elapsed 22.79 sec
+epoch 1, iter 1100, avg. loss 1.51, cum. examples 3200, time elapsed 23.72 sec
+epoch 1, iter 1150, avg. loss 1.50, cum. examples 4800, time elapsed 24.66 sec
+epoch 1, iter 1200, avg. loss 1.50, cum. examples 6400, time elapsed 25.56 sec
+begin validation ...
+validation: iter 1200, dev. score 1.447397, dev. accuracy 0.361490
+save currently the best model to [model.bin]
+epoch 1, iter 1250, avg. loss 1.49, cum. examples 1600, time elapsed 27.19 sec
+epoch 1, iter 1300, avg. loss 1.50, cum. examples 3200, time elapsed 28.08 sec
+epoch 1, iter 1350, avg. loss 1.49, cum. examples 4800, time elapsed 28.97 sec
+epoch 1, iter 1400, avg. loss 1.48, cum. examples 6400, time elapsed 29.89 sec
+begin validation ...
+validation: iter 1400, dev. score 1.437782, dev. accuracy 0.361490
+save currently the best model to [model.bin]
+epoch 1, iter 1450, avg. loss 1.48, cum. examples 1600, time elapsed 31.53 sec
+epoch 1, iter 1500, avg. loss 1.48, cum. examples 3200, time elapsed 32.43 sec
+epoch 1, iter 1550, avg. loss 1.48, cum. examples 4800, time elapsed 33.34 sec
+epoch 1, iter 1600, avg. loss 1.47, cum. examples 6400, time elapsed 34.25 sec
+begin validation ...
+validation: iter 1600, dev. score 1.438646, dev. accuracy 0.358765
+hit patience 1
+epoch 1, iter 1650, avg. loss 1.49, cum. examples 1600, time elapsed 35.93 sec
+epoch 1, iter 1700, avg. loss 1.47, cum. examples 3200, time elapsed 36.84 sec
+epoch 1, iter 1750, avg. loss 1.48, cum. examples 4800, time elapsed 37.74 sec
+epoch 1, iter 1800, avg. loss 1.48, cum. examples 6400, time elapsed 38.64 sec
+begin validation ...
+validation: iter 1800, dev. score 1.432975, dev. accuracy 0.343324
+save currently the best model to [model.bin]
+epoch 1, iter 1850, avg. loss 1.48, cum. examples 1600, time elapsed 40.27 sec
+epoch 1, iter 1900, avg. loss 1.48, cum. examples 3200, time elapsed 41.18 sec
+epoch 1, iter 1950, avg. loss 1.48, cum. examples 4800, time elapsed 42.07 sec
+epoch 1, iter 2000, avg. loss 1.48, cum. examples 6400, time elapsed 42.96 sec
+begin validation ...
+validation: iter 2000, dev. score 1.429597, dev. accuracy 0.372389
+save currently the best model to [model.bin]
+epoch 1, iter 2050, avg. loss 1.46, cum. examples 1600, time elapsed 44.59 sec
+epoch 1, iter 2100, avg. loss 1.48, cum. examples 3200, time elapsed 45.51 sec
+epoch 1, iter 2150, avg. loss 1.48, cum. examples 4800, time elapsed 46.41 sec
+epoch 1, iter 2200, avg. loss 1.48, cum. examples 6400, time elapsed 47.34 sec
+begin validation ...
+validation: iter 2200, dev. score 1.420104, dev. accuracy 0.368756
+save currently the best model to [model.bin]
+epoch 1, iter 2250, avg. loss 1.47, cum. examples 1600, time elapsed 48.97 sec
+epoch 1, iter 2300, avg. loss 1.48, cum. examples 3200, time elapsed 49.89 sec
+epoch 1, iter 2350, avg. loss 1.45, cum. examples 4800, time elapsed 50.78 sec
+epoch 1, iter 2400, avg. loss 1.45, cum. examples 6400, time elapsed 51.65 sec
+begin validation ...
+validation: iter 2400, dev. score 1.400791, dev. accuracy 0.372389
+save currently the best model to [model.bin]
+epoch 1, iter 2450, avg. loss 1.48, cum. examples 1600, time elapsed 53.27 sec
+epoch 1, iter 2500, avg. loss 1.47, cum. examples 3200, time elapsed 54.17 sec
+epoch 1, iter 2550, avg. loss 1.46, cum. examples 4800, time elapsed 55.07 sec
+epoch 1, iter 2600, avg. loss 1.48, cum. examples 6400, time elapsed 55.98 sec
+begin validation ...
+validation: iter 2600, dev. score 1.410582, dev. accuracy 0.376930
+hit patience 1
+epoch 1, iter 2650, avg. loss 1.47, cum. examples 1600, time elapsed 57.61 sec
+epoch 2, iter 2700, avg. loss 1.45, cum. examples 3200, time elapsed 58.51 sec
+epoch 2, iter 2750, avg. loss 1.45, cum. examples 4800, time elapsed 59.43 sec
+epoch 2, iter 2800, avg. loss 1.44, cum. examples 6400, time elapsed 60.34 sec
+begin validation ...
+validation: iter 2800, dev. score 1.412567, dev. accuracy 0.366939
+hit patience 2
+epoch 2, iter 2850, avg. loss 1.47, cum. examples 1600, time elapsed 61.99 sec
+epoch 2, iter 2900, avg. loss 1.48, cum. examples 3200, time elapsed 62.95 sec
+epoch 2, iter 2950, avg. loss 1.46, cum. examples 4800, time elapsed 63.85 sec
+epoch 2, iter 3000, avg. loss 1.47, cum. examples 6400, time elapsed 64.75 sec
+begin validation ...
+validation: iter 3000, dev. score 1.408414, dev. accuracy 0.369664
+hit patience 3
+epoch 2, iter 3050, avg. loss 1.46, cum. examples 1600, time elapsed 66.42 sec
+epoch 2, iter 3100, avg. loss 1.44, cum. examples 3200, time elapsed 67.34 sec
+epoch 2, iter 3150, avg. loss 1.46, cum. examples 4800, time elapsed 68.26 sec
+epoch 2, iter 3200, avg. loss 1.43, cum. examples 6400, time elapsed 69.16 sec
+begin validation ...
+validation: iter 3200, dev. score 1.398215, dev. accuracy 0.378747
+save currently the best model to [model.bin]
+epoch 2, iter 3250, avg. loss 1.44, cum. examples 1600, time elapsed 70.86 sec
+epoch 2, iter 3300, avg. loss 1.46, cum. examples 3200, time elapsed 71.75 sec
+epoch 2, iter 3350, avg. loss 1.46, cum. examples 4800, time elapsed 72.66 sec
+epoch 2, iter 3400, avg. loss 1.46, cum. examples 6400, time elapsed 73.56 sec
+begin validation ...
+validation: iter 3400, dev. score 1.398751, dev. accuracy 0.393279
+hit patience 1
+epoch 2, iter 3450, avg. loss 1.47, cum. examples 1600, time elapsed 75.21 sec
+epoch 2, iter 3500, avg. loss 1.43, cum. examples 3200, time elapsed 76.11 sec
+epoch 2, iter 3550, avg. loss 1.45, cum. examples 4800, time elapsed 77.04 sec
+epoch 2, iter 3600, avg. loss 1.45, cum. examples 6400, time elapsed 77.93 sec
+begin validation ...
+validation: iter 3600, dev. score 1.398355, dev. accuracy 0.382380
+hit patience 2
+epoch 2, iter 3650, avg. loss 1.44, cum. examples 1600, time elapsed 79.58 sec
+epoch 2, iter 3700, avg. loss 1.43, cum. examples 3200, time elapsed 80.48 sec
+epoch 2, iter 3750, avg. loss 1.42, cum. examples 4800, time elapsed 81.38 sec
+epoch 2, iter 3800, avg. loss 1.44, cum. examples 6400, time elapsed 82.32 sec
+begin validation ...
+validation: iter 3800, dev. score 1.398491, dev. accuracy 0.372389
+hit patience 3
+epoch 2, iter 3850, avg. loss 1.43, cum. examples 1600, time elapsed 83.94 sec
+epoch 2, iter 3900, avg. loss 1.44, cum. examples 3200, time elapsed 84.86 sec
+epoch 2, iter 3950, avg. loss 1.42, cum. examples 4800, time elapsed 85.79 sec
+epoch 2, iter 4000, avg. loss 1.44, cum. examples 6400, time elapsed 86.70 sec
+begin validation ...
+validation: iter 4000, dev. score 1.392637, dev. accuracy 0.383288
+save currently the best model to [model.bin]
+epoch 2, iter 4050, avg. loss 1.44, cum. examples 1600, time elapsed 88.35 sec
+epoch 2, iter 4100, avg. loss 1.43, cum. examples 3200, time elapsed 89.25 sec
+epoch 2, iter 4150, avg. loss 1.43, cum. examples 4800, time elapsed 90.15 sec
+epoch 2, iter 4200, avg. loss 1.43, cum. examples 6400, time elapsed 91.05 sec
+begin validation ...
+validation: iter 4200, dev. score 1.393220, dev. accuracy 0.381471
+hit patience 1
+epoch 2, iter 4250, avg. loss 1.46, cum. examples 1600, time elapsed 92.68 sec
+epoch 2, iter 4300, avg. loss 1.44, cum. examples 3200, time elapsed 93.58 sec
+epoch 2, iter 4350, avg. loss 1.43, cum. examples 4800, time elapsed 94.47 sec
+epoch 2, iter 4400, avg. loss 1.44, cum. examples 6400, time elapsed 95.37 sec
+begin validation ...
+validation: iter 4400, dev. score 1.398095, dev. accuracy 0.385104
+hit patience 2
+epoch 2, iter 4450, avg. loss 1.43, cum. examples 1600, time elapsed 97.03 sec
+epoch 2, iter 4500, avg. loss 1.43, cum. examples 3200, time elapsed 97.91 sec
+epoch 2, iter 4550, avg. loss 1.43, cum. examples 4800, time elapsed 98.83 sec
+epoch 2, iter 4600, avg. loss 1.46, cum. examples 6400, time elapsed 99.72 sec
+begin validation ...
+validation: iter 4600, dev. score 1.399410, dev. accuracy 0.387829
+hit patience 3
+epoch 2, iter 4650, avg. loss 1.42, cum. examples 1600, time elapsed 101.37 sec
+epoch 2, iter 4700, avg. loss 1.45, cum. examples 3200, time elapsed 102.29 sec
+epoch 2, iter 4750, avg. loss 1.42, cum. examples 4800, time elapsed 103.19 sec
+epoch 2, iter 4800, avg. loss 1.42, cum. examples 6400, time elapsed 104.11 sec
+begin validation ...
+validation: iter 4800, dev. score 1.397078, dev. accuracy 0.395095
+hit patience 4
+epoch 2, iter 4850, avg. loss 1.44, cum. examples 1600, time elapsed 105.74 sec
+epoch 2, iter 4900, avg. loss 1.42, cum. examples 3200, time elapsed 106.65 sec
+epoch 2, iter 4950, avg. loss 1.40, cum. examples 4800, time elapsed 107.57 sec
+epoch 2, iter 5000, avg. loss 1.43, cum. examples 6400, time elapsed 108.49 sec
+begin validation ...
+validation: iter 5000, dev. score 1.390920, dev. accuracy 0.383288
+save currently the best model to [model.bin]
+epoch 2, iter 5050, avg. loss 1.43, cum. examples 1600, time elapsed 110.14 sec
+epoch 2, iter 5100, avg. loss 1.43, cum. examples 3200, time elapsed 111.04 sec
+epoch 2, iter 5150, avg. loss 1.41, cum. examples 4800, time elapsed 111.95 sec
+epoch 2, iter 5200, avg. loss 1.42, cum. examples 6400, time elapsed 112.86 sec
+begin validation ...
+validation: iter 5200, dev. score 1.388886, dev. accuracy 0.376930
+save currently the best model to [model.bin]
+epoch 2, iter 5250, avg. loss 1.40, cum. examples 1600, time elapsed 114.51 sec
+epoch 2, iter 5300, avg. loss 1.41, cum. examples 3200, time elapsed 115.42 sec
+epoch 3, iter 5350, avg. loss 1.43, cum. examples 4800, time elapsed 116.32 sec
+epoch 3, iter 5400, avg. loss 1.42, cum. examples 6400, time elapsed 117.26 sec
+begin validation ...
+validation: iter 5400, dev. score 1.392863, dev. accuracy 0.388738
+hit patience 1
+epoch 3, iter 5450, avg. loss 1.39, cum. examples 1600, time elapsed 118.91 sec
+epoch 3, iter 5500, avg. loss 1.43, cum. examples 3200, time elapsed 119.83 sec
+epoch 3, iter 5550, avg. loss 1.40, cum. examples 4800, time elapsed 120.73 sec
+epoch 3, iter 5600, avg. loss 1.42, cum. examples 6400, time elapsed 121.68 sec
+begin validation ...
+validation: iter 5600, dev. score 1.386296, dev. accuracy 0.390554
+save currently the best model to [model.bin]
+epoch 3, iter 5650, avg. loss 1.41, cum. examples 1600, time elapsed 123.30 sec
+epoch 3, iter 5700, avg. loss 1.40, cum. examples 3200, time elapsed 124.19 sec
+epoch 3, iter 5750, avg. loss 1.41, cum. examples 4800, time elapsed 125.08 sec
+epoch 3, iter 5800, avg. loss 1.42, cum. examples 6400, time elapsed 125.99 sec
+begin validation ...
+validation: iter 5800, dev. score 1.396203, dev. accuracy 0.384196
+hit patience 1
+epoch 3, iter 5850, avg. loss 1.41, cum. examples 1600, time elapsed 127.63 sec
+epoch 3, iter 5900, avg. loss 1.42, cum. examples 3200, time elapsed 128.55 sec
+epoch 3, iter 5950, avg. loss 1.39, cum. examples 4800, time elapsed 129.46 sec
+epoch 3, iter 6000, avg. loss 1.40, cum. examples 6400, time elapsed 130.38 sec
+begin validation ...
+validation: iter 6000, dev. score 1.382485, dev. accuracy 0.385104
+save currently the best model to [model.bin]
+epoch 3, iter 6050, avg. loss 1.43, cum. examples 1600, time elapsed 132.03 sec
+epoch 3, iter 6100, avg. loss 1.40, cum. examples 3200, time elapsed 132.93 sec
+epoch 3, iter 6150, avg. loss 1.41, cum. examples 4800, time elapsed 133.83 sec
+epoch 3, iter 6200, avg. loss 1.40, cum. examples 6400, time elapsed 134.72 sec
+begin validation ...
+validation: iter 6200, dev. score 1.379718, dev. accuracy 0.388738
+save currently the best model to [model.bin]
+epoch 3, iter 6250, avg. loss 1.39, cum. examples 1600, time elapsed 136.34 sec
+epoch 3, iter 6300, avg. loss 1.39, cum. examples 3200, time elapsed 137.23 sec
+epoch 3, iter 6350, avg. loss 1.41, cum. examples 4800, time elapsed 138.13 sec
+epoch 3, iter 6400, avg. loss 1.40, cum. examples 6400, time elapsed 139.05 sec
+begin validation ...
+validation: iter 6400, dev. score 1.377571, dev. accuracy 0.386921
+save currently the best model to [model.bin]
+epoch 3, iter 6450, avg. loss 1.42, cum. examples 1600, time elapsed 140.71 sec
+epoch 3, iter 6500, avg. loss 1.40, cum. examples 3200, time elapsed 141.65 sec
+epoch 3, iter 6550, avg. loss 1.40, cum. examples 4800, time elapsed 142.56 sec
+epoch 3, iter 6600, avg. loss 1.40, cum. examples 6400, time elapsed 143.45 sec
+begin validation ...
+validation: iter 6600, dev. score 1.412291, dev. accuracy 0.372389
+hit patience 1
+epoch 3, iter 6650, avg. loss 1.40, cum. examples 1600, time elapsed 145.09 sec
+epoch 3, iter 6700, avg. loss 1.40, cum. examples 3200, time elapsed 146.00 sec
+epoch 3, iter 6750, avg. loss 1.38, cum. examples 4800, time elapsed 146.91 sec
+epoch 3, iter 6800, avg. loss 1.42, cum. examples 6400, time elapsed 147.81 sec
+begin validation ...
+validation: iter 6800, dev. score 1.394382, dev. accuracy 0.382380
+hit patience 2
+epoch 3, iter 6850, avg. loss 1.41, cum. examples 1600, time elapsed 149.45 sec
+epoch 3, iter 6900, avg. loss 1.38, cum. examples 3200, time elapsed 150.36 sec
+epoch 3, iter 6950, avg. loss 1.37, cum. examples 4800, time elapsed 151.28 sec
+epoch 3, iter 7000, avg. loss 1.39, cum. examples 6400, time elapsed 152.19 sec
+begin validation ...
+validation: iter 7000, dev. score 1.385204, dev. accuracy 0.378747
+hit patience 3
+epoch 3, iter 7050, avg. loss 1.42, cum. examples 1600, time elapsed 153.86 sec
+epoch 3, iter 7100, avg. loss 1.39, cum. examples 3200, time elapsed 154.76 sec
+epoch 3, iter 7150, avg. loss 1.40, cum. examples 4800, time elapsed 155.65 sec
+epoch 3, iter 7200, avg. loss 1.40, cum. examples 6400, time elapsed 156.61 sec
+begin validation ...
+validation: iter 7200, dev. score 1.386255, dev. accuracy 0.385104
+hit patience 4
+epoch 3, iter 7250, avg. loss 1.41, cum. examples 1600, time elapsed 158.25 sec
+epoch 3, iter 7300, avg. loss 1.40, cum. examples 3200, time elapsed 159.16 sec
+epoch 3, iter 7350, avg. loss 1.36, cum. examples 4800, time elapsed 160.06 sec
+epoch 3, iter 7400, avg. loss 1.42, cum. examples 6400, time elapsed 160.95 sec
+begin validation ...
+validation: iter 7400, dev. score 1.385325, dev. accuracy 0.379655
+hit patience 5
+epoch 3, iter 7450, avg. loss 1.42, cum. examples 1600, time elapsed 162.59 sec
+epoch 3, iter 7500, avg. loss 1.40, cum. examples 3200, time elapsed 163.48 sec
+epoch 3, iter 7550, avg. loss 1.39, cum. examples 4800, time elapsed 164.40 sec
+epoch 3, iter 7600, avg. loss 1.42, cum. examples 6400, time elapsed 165.31 sec
+begin validation ...
+validation: iter 7600, dev. score 1.387998, dev. accuracy 0.383288
+hit patience 6
+epoch 3, iter 7650, avg. loss 1.40, cum. examples 1600, time elapsed 166.97 sec
+epoch 3, iter 7700, avg. loss 1.37, cum. examples 3200, time elapsed 167.91 sec
+epoch 3, iter 7750, avg. loss 1.40, cum. examples 4800, time elapsed 168.83 sec
+epoch 3, iter 7800, avg. loss 1.38, cum. examples 6400, time elapsed 169.76 sec
+begin validation ...
+validation: iter 7800, dev. score 1.386914, dev. accuracy 0.378747
+hit patience 7
+epoch 3, iter 7850, avg. loss 1.39, cum. examples 1600, time elapsed 171.46 sec
+epoch 3, iter 7900, avg. loss 1.40, cum. examples 3200, time elapsed 172.36 sec
+epoch 3, iter 7950, avg. loss 1.41, cum. examples 4800, time elapsed 173.31 sec
+epoch 3, iter 8000, avg. loss 1.39, cum. examples 6400, time elapsed 174.21 sec
+begin validation ...
+validation: iter 8000, dev. score 1.388734, dev. accuracy 0.375114
+hit patience 8
+epoch 4, iter 8050, avg. loss 1.38, cum. examples 1600, time elapsed 175.85 sec
+epoch 4, iter 8100, avg. loss 1.36, cum. examples 3200, time elapsed 176.79 sec
+epoch 4, iter 8150, avg. loss 1.41, cum. examples 4800, time elapsed 177.71 sec
+epoch 4, iter 8200, avg. loss 1.39, cum. examples 6400, time elapsed 178.62 sec
+begin validation ...
+validation: iter 8200, dev. score 1.385208, dev. accuracy 0.385104
+hit patience 9
+epoch 4, iter 8250, avg. loss 1.36, cum. examples 1600, time elapsed 180.29 sec
+epoch 4, iter 8300, avg. loss 1.38, cum. examples 3200, time elapsed 181.20 sec
+epoch 4, iter 8350, avg. loss 1.39, cum. examples 4800, time elapsed 182.12 sec
+epoch 4, iter 8400, avg. loss 1.38, cum. examples 6400, time elapsed 183.06 sec
+begin validation ...
+validation: iter 8400, dev. score 1.385462, dev. accuracy 0.383288
+hit patience 10
+hit #1 trial
+load previously best model and decay learning rate to 0.000500
+restore parameters of the optimizers
+epoch 4, iter 8450, avg. loss 1.39, cum. examples 1600, time elapsed 184.71 sec
+epoch 4, iter 8500, avg. loss 1.40, cum. examples 3200, time elapsed 185.62 sec
+epoch 4, iter 8550, avg. loss 1.39, cum. examples 4800, time elapsed 186.51 sec
+epoch 4, iter 8600, avg. loss 1.38, cum. examples 6400, time elapsed 187.42 sec
+begin validation ...
+validation: iter 8600, dev. score 1.380263, dev. accuracy 0.384196
+hit patience 1
+epoch 4, iter 8650, avg. loss 1.41, cum. examples 1600, time elapsed 189.08 sec
+epoch 4, iter 8700, avg. loss 1.39, cum. examples 3200, time elapsed 189.98 sec
+epoch 4, iter 8750, avg. loss 1.37, cum. examples 4800, time elapsed 190.88 sec
+epoch 4, iter 8800, avg. loss 1.35, cum. examples 6400, time elapsed 191.80 sec
+begin validation ...
+validation: iter 8800, dev. score 1.381641, dev. accuracy 0.382380
+hit patience 2
+epoch 4, iter 8850, avg. loss 1.37, cum. examples 1600, time elapsed 193.44 sec
+epoch 4, iter 8900, avg. loss 1.39, cum. examples 3200, time elapsed 194.35 sec
+epoch 4, iter 8950, avg. loss 1.41, cum. examples 4800, time elapsed 195.27 sec
+epoch 4, iter 9000, avg. loss 1.40, cum. examples 6400, time elapsed 196.19 sec
+begin validation ...
+validation: iter 9000, dev. score 1.388483, dev. accuracy 0.384196
+hit patience 3
+epoch 4, iter 9050, avg. loss 1.39, cum. examples 1600, time elapsed 197.85 sec
+epoch 4, iter 9100, avg. loss 1.37, cum. examples 3200, time elapsed 198.78 sec
+epoch 4, iter 9150, avg. loss 1.37, cum. examples 4800, time elapsed 199.69 sec
+epoch 4, iter 9200, avg. loss 1.40, cum. examples 6400, time elapsed 200.58 sec
+begin validation ...
+validation: iter 9200, dev. score 1.383550, dev. accuracy 0.390554
+hit patience 4
+epoch 4, iter 9250, avg. loss 1.39, cum. examples 1600, time elapsed 202.25 sec
+epoch 4, iter 9300, avg. loss 1.38, cum. examples 3200, time elapsed 203.18 sec
+epoch 4, iter 9350, avg. loss 1.37, cum. examples 4800, time elapsed 204.09 sec
+epoch 4, iter 9400, avg. loss 1.37, cum. examples 6400, time elapsed 205.00 sec
+begin validation ...
+validation: iter 9400, dev. score 1.381618, dev. accuracy 0.389646
+hit patience 5
+epoch 4, iter 9450, avg. loss 1.38, cum. examples 1600, time elapsed 206.66 sec
+epoch 4, iter 9500, avg. loss 1.41, cum. examples 3200, time elapsed 207.59 sec
+epoch 4, iter 9550, avg. loss 1.38, cum. examples 4800, time elapsed 208.49 sec
+epoch 4, iter 9600, avg. loss 1.38, cum. examples 6400, time elapsed 209.40 sec
+begin validation ...
+validation: iter 9600, dev. score 1.382440, dev. accuracy 0.391462
+hit patience 6
+epoch 4, iter 9650, avg. loss 1.38, cum. examples 1600, time elapsed 211.04 sec
+epoch 4, iter 9700, avg. loss 1.38, cum. examples 3200, time elapsed 211.94 sec
+epoch 4, iter 9750, avg. loss 1.41, cum. examples 4800, time elapsed 212.83 sec
+epoch 4, iter 9800, avg. loss 1.39, cum. examples 6400, time elapsed 213.74 sec
+begin validation ...
+validation: iter 9800, dev. score 1.381540, dev. accuracy 0.382380
+hit patience 7
+epoch 4, iter 9850, avg. loss 1.38, cum. examples 1600, time elapsed 215.38 sec
+epoch 4, iter 9900, avg. loss 1.38, cum. examples 3200, time elapsed 216.29 sec
+epoch 4, iter 9950, avg. loss 1.37, cum. examples 4800, time elapsed 217.20 sec
+epoch 4, iter 10000, avg. loss 1.39, cum. examples 6400, time elapsed 218.12 sec
+begin validation ...
+validation: iter 10000, dev. score 1.388694, dev. accuracy 0.383288
+hit patience 8
+epoch 4, iter 10050, avg. loss 1.38, cum. examples 1600, time elapsed 219.79 sec
+epoch 4, iter 10100, avg. loss 1.41, cum. examples 3200, time elapsed 220.69 sec
+epoch 4, iter 10150, avg. loss 1.38, cum. examples 4800, time elapsed 221.62 sec
+epoch 4, iter 10200, avg. loss 1.38, cum. examples 6400, time elapsed 222.54 sec
+begin validation ...
+validation: iter 10200, dev. score 1.391657, dev. accuracy 0.385104
+hit patience 9
+epoch 4, iter 10250, avg. loss 1.38, cum. examples 1600, time elapsed 224.20 sec
+epoch 4, iter 10300, avg. loss 1.40, cum. examples 3200, time elapsed 225.11 sec
+epoch 4, iter 10350, avg. loss 1.38, cum. examples 4800, time elapsed 226.02 sec
+epoch 4, iter 10400, avg. loss 1.37, cum. examples 6400, time elapsed 226.94 sec
+begin validation ...
+validation: iter 10400, dev. score 1.387362, dev. accuracy 0.387829
+hit patience 10
+hit #2 trial
+load previously best model and decay learning rate to 0.000250
+restore parameters of the optimizers
+epoch 4, iter 10450, avg. loss 1.38, cum. examples 1600, time elapsed 228.62 sec
+epoch 4, iter 10500, avg. loss 1.43, cum. examples 3200, time elapsed 229.57 sec
+epoch 4, iter 10550, avg. loss 1.39, cum. examples 4800, time elapsed 230.49 sec
+epoch 4, iter 10600, avg. loss 1.38, cum. examples 6400, time elapsed 231.40 sec
+begin validation ...
+validation: iter 10600, dev. score 1.382011, dev. accuracy 0.387829
+hit patience 1
+epoch 4, iter 10650, avg. loss 1.41, cum. examples 1600, time elapsed 233.07 sec
+epoch 5, iter 10700, avg. loss 1.40, cum. examples 3200, time elapsed 234.00 sec
+epoch 5, iter 10750, avg. loss 1.41, cum. examples 4800, time elapsed 234.95 sec
+epoch 5, iter 10800, avg. loss 1.39, cum. examples 6400, time elapsed 235.88 sec
+begin validation ...
+validation: iter 10800, dev. score 1.378465, dev. accuracy 0.395095
+hit patience 2
+epoch 5, iter 10850, avg. loss 1.39, cum. examples 1600, time elapsed 237.56 sec
+epoch 5, iter 10900, avg. loss 1.38, cum. examples 3200, time elapsed 238.48 sec
+epoch 5, iter 10950, avg. loss 1.40, cum. examples 4800, time elapsed 239.40 sec
+epoch 5, iter 11000, avg. loss 1.40, cum. examples 6400, time elapsed 240.30 sec
+begin validation ...
+validation: iter 11000, dev. score 1.384271, dev. accuracy 0.396004
+hit patience 3
+epoch 5, iter 11050, avg. loss 1.40, cum. examples 1600, time elapsed 241.96 sec
+epoch 5, iter 11100, avg. loss 1.39, cum. examples 3200, time elapsed 242.89 sec
+epoch 5, iter 11150, avg. loss 1.38, cum. examples 4800, time elapsed 243.79 sec
+epoch 5, iter 11200, avg. loss 1.38, cum. examples 6400, time elapsed 244.71 sec
+begin validation ...
+validation: iter 11200, dev. score 1.377939, dev. accuracy 0.388738
+hit patience 4
+epoch 5, iter 11250, avg. loss 1.39, cum. examples 1600, time elapsed 246.37 sec
+epoch 5, iter 11300, avg. loss 1.39, cum. examples 3200, time elapsed 247.29 sec
+epoch 5, iter 11350, avg. loss 1.39, cum. examples 4800, time elapsed 248.19 sec
+epoch 5, iter 11400, avg. loss 1.40, cum. examples 6400, time elapsed 249.12 sec
+begin validation ...
+validation: iter 11400, dev. score 1.379317, dev. accuracy 0.391462
+hit patience 5
+epoch 5, iter 11450, avg. loss 1.41, cum. examples 1600, time elapsed 250.81 sec
+epoch 5, iter 11500, avg. loss 1.38, cum. examples 3200, time elapsed 251.73 sec
+epoch 5, iter 11550, avg. loss 1.40, cum. examples 4800, time elapsed 252.66 sec
+epoch 5, iter 11600, avg. loss 1.36, cum. examples 6400, time elapsed 253.58 sec
+begin validation ...
+validation: iter 11600, dev. score 1.378995, dev. accuracy 0.392371
+hit patience 6
+epoch 5, iter 11650, avg. loss 1.38, cum. examples 1600, time elapsed 255.25 sec
+epoch 5, iter 11700, avg. loss 1.42, cum. examples 3200, time elapsed 256.17 sec
+epoch 5, iter 11750, avg. loss 1.38, cum. examples 4800, time elapsed 257.09 sec
+epoch 5, iter 11800, avg. loss 1.39, cum. examples 6400, time elapsed 258.00 sec
+begin validation ...
+validation: iter 11800, dev. score 1.385617, dev. accuracy 0.393279
+hit patience 7
+epoch 5, iter 11850, avg. loss 1.37, cum. examples 1600, time elapsed 259.67 sec
+epoch 5, iter 11900, avg. loss 1.37, cum. examples 3200, time elapsed 260.60 sec
+epoch 5, iter 11950, avg. loss 1.37, cum. examples 4800, time elapsed 261.50 sec
+epoch 5, iter 12000, avg. loss 1.37, cum. examples 6400, time elapsed 262.42 sec
+begin validation ...
+validation: iter 12000, dev. score 1.384195, dev. accuracy 0.387829
+hit patience 8
+epoch 5, iter 12050, avg. loss 1.38, cum. examples 1600, time elapsed 264.09 sec
+epoch 5, iter 12100, avg. loss 1.42, cum. examples 3200, time elapsed 265.02 sec
+epoch 5, iter 12150, avg. loss 1.37, cum. examples 4800, time elapsed 265.93 sec
+epoch 5, iter 12200, avg. loss 1.37, cum. examples 6400, time elapsed 266.85 sec
+begin validation ...
+validation: iter 12200, dev. score 1.381634, dev. accuracy 0.391462
+hit patience 9
+epoch 5, iter 12250, avg. loss 1.38, cum. examples 1600, time elapsed 268.50 sec
+epoch 5, iter 12300, avg. loss 1.39, cum. examples 3200, time elapsed 269.40 sec
+epoch 5, iter 12350, avg. loss 1.39, cum. examples 4800, time elapsed 270.34 sec
+epoch 5, iter 12400, avg. loss 1.39, cum. examples 6400, time elapsed 271.26 sec
+begin validation ...
+validation: iter 12400, dev. score 1.383831, dev. accuracy 0.399637
+hit patience 10
+hit #3 trial
+load previously best model and decay learning rate to 0.000125
+restore parameters of the optimizers
+epoch 5, iter 12450, avg. loss 1.40, cum. examples 1600, time elapsed 272.94 sec
+epoch 5, iter 12500, avg. loss 1.37, cum. examples 3200, time elapsed 273.85 sec
+epoch 5, iter 12550, avg. loss 1.38, cum. examples 4800, time elapsed 274.77 sec
+epoch 5, iter 12600, avg. loss 1.42, cum. examples 6400, time elapsed 275.70 sec
+begin validation ...
+validation: iter 12600, dev. score 1.381739, dev. accuracy 0.386921
+hit patience 1
+epoch 5, iter 12650, avg. loss 1.37, cum. examples 1600, time elapsed 277.38 sec
+epoch 5, iter 12700, avg. loss 1.42, cum. examples 3200, time elapsed 278.31 sec
+epoch 5, iter 12750, avg. loss 1.41, cum. examples 4800, time elapsed 279.23 sec
+epoch 5, iter 12800, avg. loss 1.37, cum. examples 6400, time elapsed 280.16 sec
+begin validation ...
+validation: iter 12800, dev. score 1.380857, dev. accuracy 0.386921
+hit patience 2
+epoch 5, iter 12850, avg. loss 1.40, cum. examples 1600, time elapsed 281.82 sec
+epoch 5, iter 12900, avg. loss 1.39, cum. examples 3200, time elapsed 282.74 sec
+epoch 5, iter 12950, avg. loss 1.39, cum. examples 4800, time elapsed 283.65 sec
+epoch 5, iter 13000, avg. loss 1.41, cum. examples 6400, time elapsed 284.55 sec
+begin validation ...
+validation: iter 13000, dev. score 1.379171, dev. accuracy 0.385104
+hit patience 3
+epoch 5, iter 13050, avg. loss 1.37, cum. examples 1600, time elapsed 286.20 sec
+epoch 5, iter 13100, avg. loss 1.39, cum. examples 3200, time elapsed 287.09 sec
+epoch 5, iter 13150, avg. loss 1.39, cum. examples 4800, time elapsed 288.01 sec
+epoch 5, iter 13200, avg. loss 1.38, cum. examples 6400, time elapsed 288.91 sec
+begin validation ...
+validation: iter 13200, dev. score 1.377578, dev. accuracy 0.386013
+hit patience 4
+epoch 5, iter 13250, avg. loss 1.39, cum. examples 1600, time elapsed 290.56 sec
+epoch 5, iter 13300, avg. loss 1.37, cum. examples 3200, time elapsed 291.46 sec
+epoch 5, iter 13350, avg. loss 1.40, cum. examples 4800, time elapsed 292.37 sec
+epoch 6, iter 13400, avg. loss 1.41, cum. examples 6400, time elapsed 293.28 sec
+begin validation ...
+validation: iter 13400, dev. score 1.383792, dev. accuracy 0.392371
+hit patience 5
+epoch 6, iter 13450, avg. loss 1.39, cum. examples 1600, time elapsed 294.94 sec
+epoch 6, iter 13500, avg. loss 1.39, cum. examples 3200, time elapsed 295.88 sec
+epoch 6, iter 13550, avg. loss 1.38, cum. examples 4800, time elapsed 296.80 sec
+epoch 6, iter 13600, avg. loss 1.39, cum. examples 6400, time elapsed 297.73 sec
+begin validation ...
+validation: iter 13600, dev. score 1.383079, dev. accuracy 0.390554
+hit patience 6
+epoch 6, iter 13650, avg. loss 1.37, cum. examples 1600, time elapsed 299.39 sec
+epoch 6, iter 13700, avg. loss 1.38, cum. examples 3200, time elapsed 300.31 sec
+epoch 6, iter 13750, avg. loss 1.37, cum. examples 4800, time elapsed 301.23 sec
+epoch 6, iter 13800, avg. loss 1.40, cum. examples 6400, time elapsed 302.14 sec
+begin validation ...
+validation: iter 13800, dev. score 1.381830, dev. accuracy 0.389646
+hit patience 7
+epoch 6, iter 13850, avg. loss 1.43, cum. examples 1600, time elapsed 303.79 sec
+epoch 6, iter 13900, avg. loss 1.36, cum. examples 3200, time elapsed 304.71 sec
+epoch 6, iter 13950, avg. loss 1.41, cum. examples 4800, time elapsed 305.61 sec
+epoch 6, iter 14000, avg. loss 1.40, cum. examples 6400, time elapsed 306.53 sec
+begin validation ...
+validation: iter 14000, dev. score 1.383774, dev. accuracy 0.386013
+hit patience 8
+epoch 6, iter 14050, avg. loss 1.40, cum. examples 1600, time elapsed 308.19 sec
+epoch 6, iter 14100, avg. loss 1.38, cum. examples 3200, time elapsed 309.09 sec
+epoch 6, iter 14150, avg. loss 1.37, cum. examples 4800, time elapsed 310.01 sec
+epoch 6, iter 14200, avg. loss 1.37, cum. examples 6400, time elapsed 310.94 sec
+begin validation ...
+validation: iter 14200, dev. score 1.382591, dev. accuracy 0.392371
+hit patience 9
+epoch 6, iter 14250, avg. loss 1.40, cum. examples 1600, time elapsed 312.62 sec
+epoch 6, iter 14300, avg. loss 1.40, cum. examples 3200, time elapsed 313.55 sec
+epoch 6, iter 14350, avg. loss 1.36, cum. examples 4800, time elapsed 314.47 sec
+epoch 6, iter 14400, avg. loss 1.39, cum. examples 6400, time elapsed 315.37 sec
+begin validation ...
+validation: iter 14400, dev. score 1.381596, dev. accuracy 0.388738
+hit patience 10
+hit #4 trial
+load previously best model and decay learning rate to 0.000063
+restore parameters of the optimizers
+epoch 6, iter 14450, avg. loss 1.40, cum. examples 1600, time elapsed 317.03 sec
+epoch 6, iter 14500, avg. loss 1.39, cum. examples 3200, time elapsed 317.93 sec
+epoch 6, iter 14550, avg. loss 1.39, cum. examples 4800, time elapsed 318.83 sec
+epoch 6, iter 14600, avg. loss 1.41, cum. examples 6400, time elapsed 319.75 sec
+begin validation ...
+validation: iter 14600, dev. score 1.379980, dev. accuracy 0.387829
+hit patience 1
+epoch 6, iter 14650, avg. loss 1.40, cum. examples 1600, time elapsed 321.40 sec
+epoch 6, iter 14700, avg. loss 1.38, cum. examples 3200, time elapsed 322.33 sec
+epoch 6, iter 14750, avg. loss 1.39, cum. examples 4800, time elapsed 323.24 sec
+epoch 6, iter 14800, avg. loss 1.41, cum. examples 6400, time elapsed 324.17 sec
+begin validation ...
+validation: iter 14800, dev. score 1.379677, dev. accuracy 0.383288
+hit patience 2
+epoch 6, iter 14850, avg. loss 1.41, cum. examples 1600, time elapsed 325.83 sec
+epoch 6, iter 14900, avg. loss 1.39, cum. examples 3200, time elapsed 326.75 sec
+epoch 6, iter 14950, avg. loss 1.39, cum. examples 4800, time elapsed 327.67 sec
+epoch 6, iter 15000, avg. loss 1.40, cum. examples 6400, time elapsed 328.59 sec
+begin validation ...
+validation: iter 15000, dev. score 1.379601, dev. accuracy 0.385104
+hit patience 3
+epoch 6, iter 15050, avg. loss 1.37, cum. examples 1600, time elapsed 330.26 sec
+epoch 6, iter 15100, avg. loss 1.39, cum. examples 3200, time elapsed 331.17 sec
+epoch 6, iter 15150, avg. loss 1.39, cum. examples 4800, time elapsed 332.09 sec
+epoch 6, iter 15200, avg. loss 1.38, cum. examples 6400, time elapsed 333.00 sec
+begin validation ...
+validation: iter 15200, dev. score 1.379814, dev. accuracy 0.388738
+hit patience 4
+epoch 6, iter 15250, avg. loss 1.40, cum. examples 1600, time elapsed 334.66 sec
+epoch 6, iter 15300, avg. loss 1.38, cum. examples 3200, time elapsed 335.55 sec
+epoch 6, iter 15350, avg. loss 1.40, cum. examples 4800, time elapsed 336.48 sec
+epoch 6, iter 15400, avg. loss 1.40, cum. examples 6400, time elapsed 337.43 sec
+begin validation ...
+validation: iter 15400, dev. score 1.379452, dev. accuracy 0.385104
+hit patience 5
+epoch 6, iter 15450, avg. loss 1.40, cum. examples 1600, time elapsed 339.08 sec
+epoch 6, iter 15500, avg. loss 1.38, cum. examples 3200, time elapsed 340.02 sec
+epoch 6, iter 15550, avg. loss 1.40, cum. examples 4800, time elapsed 340.93 sec
+epoch 6, iter 15600, avg. loss 1.38, cum. examples 6400, time elapsed 341.84 sec
+begin validation ...
+validation: iter 15600, dev. score 1.379460, dev. accuracy 0.391462
+hit patience 6
+epoch 6, iter 15650, avg. loss 1.37, cum. examples 1600, time elapsed 343.49 sec
+epoch 6, iter 15700, avg. loss 1.40, cum. examples 3200, time elapsed 344.38 sec
+epoch 6, iter 15750, avg. loss 1.38, cum. examples 4800, time elapsed 345.29 sec
+epoch 6, iter 15800, avg. loss 1.40, cum. examples 6400, time elapsed 346.22 sec
+begin validation ...
+validation: iter 15800, dev. score 1.379624, dev. accuracy 0.388738
+hit patience 7
+epoch 6, iter 15850, avg. loss 1.39, cum. examples 1600, time elapsed 347.92 sec
+epoch 6, iter 15900, avg. loss 1.40, cum. examples 3200, time elapsed 348.82 sec
+epoch 6, iter 15950, avg. loss 1.38, cum. examples 4800, time elapsed 349.74 sec
+epoch 6, iter 16000, avg. loss 1.40, cum. examples 6400, time elapsed 350.66 sec
+begin validation ...
+validation: iter 16000, dev. score 1.380652, dev. accuracy 0.388738
+hit patience 8
+epoch 7, iter 16050, avg. loss 1.39, cum. examples 1600, time elapsed 352.34 sec
+epoch 7, iter 16100, avg. loss 1.38, cum. examples 3200, time elapsed 353.26 sec
+epoch 7, iter 16150, avg. loss 1.40, cum. examples 4800, time elapsed 354.17 sec
+epoch 7, iter 16200, avg. loss 1.41, cum. examples 6400, time elapsed 355.10 sec
+begin validation ...
+validation: iter 16200, dev. score 1.380378, dev. accuracy 0.395095
+hit patience 9
+epoch 7, iter 16250, avg. loss 1.40, cum. examples 1600, time elapsed 356.76 sec
+epoch 7, iter 16300, avg. loss 1.37, cum. examples 3200, time elapsed 357.67 sec
+epoch 7, iter 16350, avg. loss 1.39, cum. examples 4800, time elapsed 358.58 sec
+epoch 7, iter 16400, avg. loss 1.39, cum. examples 6400, time elapsed 359.50 sec
+begin validation ...
+validation: iter 16400, dev. score 1.380620, dev. accuracy 0.387829
+hit patience 10
+hit #5 trial
+early stop!
