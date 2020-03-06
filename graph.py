@@ -24,4 +24,4 @@ for filename in filenames:
 
 
 fig.legend()
-fig.savefig('graph_out.png')
+fig.savefig('graphs/graph_out_%f.png' % np.random.random())
