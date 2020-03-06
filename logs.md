@@ -23,6 +23,11 @@ loss: -1.423681
 accuracy: 0.377828
 loss: -1.415662
 
+20_hidden_gaussian_1.0_std_10x
+
+accuracy: 0.380543
+loss: -1.442878
+
 
 20_hidden_no_aug
 
