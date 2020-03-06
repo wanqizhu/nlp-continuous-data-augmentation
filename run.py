@@ -15,10 +15,6 @@ Usage:
 Options:
     -h --help                               show this screen.
     --cuda                                  use GPU
-    --train-src=<file>                      train source file
-    --train-tgt=<file>                      train target file
-    --dev-src=<file>                        dev source file
-    --dev-tgt=<file>                        dev target file
     --data-aug=<string>                     data augmentation method [default: "None"]
     --data-aug-amount=<float>               data augmentation amount [default: 0.01]
     --data-aug-nx=<int>                     data augmentation niters size [default: 4]
@@ -30,18 +26,14 @@ Options:
     --clip-grad=<float>                     gradient clipping [default: 5.0]
     --log-every=<int>                       log every [default: 50]
     --max-epoch=<int>                       max epoch [default: 30]
-    --input-feed                            use input feeding
     --patience=<int>                        wait for how many iterations to decay learning rate [default: 5]
     --max-num-trial=<int>                   terminate training after how many trials [default: 5]
     --lr-decay=<float>                      learning rate decay [default: 0.5]
-    --beam-size=<int>                       beam size [default: 5]
-    --sample-size=<int>                     sample size [default: 5]
     --lr=<float>                            learning rate [default: 0.001]
     --uniform-init=<float>                  uniformly initialize all parameters [default: 0.1]
     --save-to=<file>                        model save path [default: model.bin]
     --valid-niter=<int>                     perform validation after how many iterations [default: 2000]
     --dropout=<float>                       dropout [default: 0.3]
-    --max-decoding-time-step=<int>          maximum number of decoding time steps [default: 70]
     --train-perct=<float>                   % of training data to use [default: 1.0]
     --dev-perct=<float>                     % of dev data to use [default: 1.0]
 """
@@ -98,7 +90,8 @@ def test(args):
     if args["--cuda"]:
         model = model.to(torch.device("cuda:0"))
 
-    test_data = load_test_data()
+    binary = int(args["--num-classes"]) == 2
+    test_data = load_test_data(binary = binary)
     batch_size = int(args["--batch-size"])
 
     cum_correct = 0
@@ -139,8 +132,10 @@ def train(args: Dict):
     f_dev = open(dev_logfile, "w")
     f_dev.write("#epoch, train iter, dev score, dev accuracy\n")
 
-    train_data = load_train_data(perct=float(args["--train-perct"]))
-    dev_data = load_dev_data(dev_perct=float(args["--dev-perct"]))
+    binary = int(args["--num-classes"]) == 2
+
+    train_data = load_train_data(perct=float(args["--train-perct"]), binary=binary)
+    dev_data = load_dev_data(dev_perct=float(args["--dev-perct"]), binary=binary)
 
     train_batch_size = int(args["--batch-size"])
     clip_grad = float(args["--clip-grad"])
