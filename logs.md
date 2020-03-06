@@ -55,10 +55,17 @@ loss: -1.427532
 accuracy: 0.383710
 loss: -1.418725
 
-# 20_hidden_identity_0.05_std_10x
 
+# 20_hidden_identity_0.05_std_10x
+seed=1
+
+accuracy: 0.372398
+loss: 1.427621
+
+seed=0
 accuracy: 0.382353
 loss: -1.412671
+
 
 # 20_hidden_identity_0.025_std_10x
 
