@@ -48,3 +48,8 @@ loss: -1.427532
 
 accuracy: 0.382353
 loss: -1.412671
+
+20_hidden_identity_0.025_std_10x
+
+accuracy: 0.376471
+loss: -1.415293
