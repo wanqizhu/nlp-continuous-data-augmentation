@@ -58,7 +58,8 @@ from typing import List, Tuple, Dict, Set, Union
 from tqdm import tqdm
 from utils import batch_iter, load_train_data, load_dev_data, load_test_data
 from collections import defaultdict
-from data_augmenter import BaseDataAugmenter, GaussianNoiseDataAugmenter
+from data_augmenter import BaseDataAugmenter, GaussianNoiseDataAugmenter,
+                           NoisyIdentityDataAugmenter
 
 import torch
 import torch.nn.utils
@@ -155,6 +156,9 @@ def train(args: Dict):
     print_and_write("Using data augmentation method: %s" % data_augmenter, f_long)
     if data_augmenter == "gaussian":
         data_augmenter = GaussianNoiseDataAugmenter(float(args["--data-aug-amount"]),
+                                                    int(args["--data-aug-nx"]))
+    elif data_augmenter == "identity":
+        data_augmenter = NoisyIdentityDataAugmenter(float(args["--data-aug-amount"]),
                                                     int(args["--data-aug-nx"]))
     else:
         data_augmenter = BaseDataAugmenter()

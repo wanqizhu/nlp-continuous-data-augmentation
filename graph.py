@@ -3,7 +3,7 @@ import numpy as np
 import sys
 import os
 
-fig, axs = plt.subplots(2)
+fig, axs = plt.subplots(2, sharex=True)
 
 if len(sys.argv) == 1:  # no args
     filenames = ['train_logfiles/' + sorted(os.listdir('train_logfiles'))[-1],
